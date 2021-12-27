@@ -2,3 +2,7 @@
 /libft/
 *.o
 *.a
+a.out
+test.c
+/a.out.dSYM/
+/.vscode/
