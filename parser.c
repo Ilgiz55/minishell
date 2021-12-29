@@ -433,5 +433,3 @@ t_msh	*ft_parser(char *str, char **env)
 // 	}
 // 	return (0);
 // }
-
-
