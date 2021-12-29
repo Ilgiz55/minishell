@@ -368,6 +368,26 @@ t_msh	*ft_new_command(t_msh *msh, char *str, int *k)
 	return (msh);
 }
 
+int	ft_check_open_quotes(char *str)
+{
+	int	i;
+
+	i = 0;
+	while (str[i])
+	{
+		if (str[i] == '\"')
+			while (str[++i] != '\"')
+				if (str[i] == '\0')
+					return (1);
+		if (str[i] ==  '\'')
+			while (str[++i] != '\'')
+				if (str[i] == '\0')
+					return (1);
+		i++;
+	}
+	return (0);
+}
+
 t_msh	*ft_parser(char *str, char **env)
 {
 	int		i;
@@ -375,6 +395,8 @@ t_msh	*ft_parser(char *str, char **env)
 	t_msh	*msh;
 	t_msh	*save_msh;
 
+	if (ft_check_open_quotes(str))
+		exit(ft_error("syntax error: open quotes"));
 	msh = ft_mshnew();
 	save_msh = msh;
 	i = ft_check_start(str);
