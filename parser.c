@@ -27,7 +27,7 @@ void	ft_quotes(char **s, int *k)
 	str = ft_strjoin(tmp[3], tmp[2]);
 	ft_free_tmp(tmp, 4);
 	free(*s);
-	*k = i - 1;
+	*k = i - 2;
 	*s = str;
 }
 
@@ -49,12 +49,12 @@ char	*ft_get_env(char **env, char *key)
 			if (ft_strncmp(key, answer, ft_strlen(key)) == 0)
 			{
 				free(answer);
-				break ;
+				return (ft_substr(env[i], j + 1, ft_strlen(env[i]) - j));
 			}
 			free(answer);
 		}
 	}
-	return (ft_substr(env[i], j + 1, ft_strlen(env[i]) - j));
+	return (NULL);
 }
 
 void	ft_dollar(char **s, int *j, char **env)
@@ -137,7 +137,7 @@ void	ft_double_quotes(char **s, int *j, char **env)
 	str = ft_strjoin(tmp[3], tmp[2]);
 	ft_free_tmp(tmp, 4);
 	free(*s);
-	*j = i - 1;
+	*j = i - 2;
 	*s = str;
 }
 
@@ -234,7 +234,7 @@ void	ft_redirect_output(char *str, int *j, t_msh *msh, int flag)
 	int		i;
 
 	i = *j;
-	i = ft_skip_space(str, ++i);
+	i = ft_skip_space(str, i);
 	if (str[i] == '<' || str[i] == ';' || str[i] == '|' || str[i] == '\0')
 		exit(ft_error("syntax error"));
 	file_name = ft_get_file_name(str, &i);
@@ -284,7 +284,6 @@ void	ft_redirect_input(char *str, int *j, t_msh *msh)
 	i = ft_skip_space(str, i);
 	if (str[i] == '>' || str[i] == ';' || str[i] == '|' || str[i] == '\0')
 		exit(ft_error("syntax error"));
-	i++;
 	file_name = ft_get_file_name(str, &i);
 	msh->fdin = open(file_name, O_RDONLY, 0644);
 	free(file_name);
@@ -407,6 +406,7 @@ t_msh	*ft_parser(char *str, char **env)
 // 	{
 // 		str = readline("minishell>");
 // 		add_history(str);
+
 // 		msh = ft_parser(str, env);
 
 // 		j = 1;
