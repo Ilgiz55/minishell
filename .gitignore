@@ -1,0 +1,9 @@
+.DS_Store
+/libft/
+*.o
+*.a
+a.out
+test.c
+/a.out.dSYM/
+/.vscode/
+/sasha_files/
