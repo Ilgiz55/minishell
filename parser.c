@@ -110,8 +110,8 @@ int	ft_dollar_in_double_quotes(char **env, char **s, int *i)
 	if (str[*i] == '\\' && (str[*i + 1] == '\"' || str[*i + 1] || \
 		str[*i + 1] == '$' || str[*i + 1] == '\\'))
 	{
-		(*i)++;
 		ft_slesh(s, i);
+		(*i)++;
 	}
 	if (str[*i] == '$')
 		ft_dollar(s, i, env);
@@ -167,16 +167,17 @@ int	ft_skip_space(char *str, int i)
 	return (i);
 }
 
-int	ft_check_start(char *str)
+int	ft_check_start(char *str, int *j)
 {
 	int	i;
 
-	i = 0;
+	i = *j;
 	while (str[i] == ' ')
 		i++;
 	if (str[i] == '|' || str[i] == ';')
-		exit(ft_error("syntax error"));
-	return (i);
+		return (ft_error("syntax error"));
+	*j = i;
+	return (0);
 }
 
 int	ft_argc(char *str, int i)
@@ -228,7 +229,7 @@ char	*ft_get_stop_word(char *str, int *j)
 	return (stop_word);
 }
 
-void	ft_redirect_output(char *str, int *j, t_msh *msh, int flag)
+int	ft_redirect_output(char *str, int *j, t_msh *msh, int flag)
 {
 	char	*file_name;
 	int		i;
@@ -236,7 +237,7 @@ void	ft_redirect_output(char *str, int *j, t_msh *msh, int flag)
 	i = *j;
 	i = ft_skip_space(str, i);
 	if (str[i] == '<' || str[i] == ';' || str[i] == '|' || str[i] == '\0')
-		exit(ft_error("syntax error"));
+		return (ft_error("syntax error"));
 	file_name = ft_get_file_name(str, &i);
 	if (flag == 2)
 		msh->fdout = open(file_name, O_WRONLY | O_CREAT | O_APPEND, 0644);
@@ -244,9 +245,10 @@ void	ft_redirect_output(char *str, int *j, t_msh *msh, int flag)
 		msh->fdout = open(file_name, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	free(file_name);
 	*j = i;
+	return (0);
 }
 
-void	ft_stop_word(char *str, int *j, t_msh *msh)
+int	ft_stop_word(char *str, int *j, t_msh *msh)
 {
 	char	*stop_word;
 	char	*new_word;
@@ -256,7 +258,7 @@ void	ft_stop_word(char *str, int *j, t_msh *msh)
 	i = ft_skip_space(str, ++i);
 	if (str[i] == '>' || str[i] == '<' || str[i] == ';' || \
 		str[i] == '|' || str[i] == '\0')
-		exit(ft_error("syntax error"));
+		return (ft_error("syntax error"));
 	stop_word = ft_get_stop_word(str, &i);
 	i++;
 	new_word = readline(">");
@@ -273,9 +275,10 @@ void	ft_stop_word(char *str, int *j, t_msh *msh)
 		free(new_word);
 		new_word = readline(">");
 	}
+	return (0);
 }
 
-void	ft_redirect_input(char *str, int *j, t_msh *msh)
+int	ft_redirect_input(char *str, int *j, t_msh *msh)
 {
 	char	*file_name;
 	int		i;
@@ -283,32 +286,43 @@ void	ft_redirect_input(char *str, int *j, t_msh *msh)
 	i = *j;
 	i = ft_skip_space(str, i);
 	if (str[i] == '>' || str[i] == ';' || str[i] == '|' || str[i] == '\0')
-		exit(ft_error("syntax error"));
+		return (ft_error("syntax error"));
 	file_name = ft_get_file_name(str, &i);
 	msh->fdin = open(file_name, O_RDONLY, 0644);
-	free(file_name);
 	if (msh->fdin < 0)
-		exit(ft_error("no file"));
+	{
+		printf("%s: No such file or directory\n", file_name);
+		free(file_name);
+		return (1);
+	}
+	free(file_name);
 	*j = i;
+	return (0);
 }
 
-int	ft_redirect(t_msh *msh, char *str, int i)
+int	ft_redirect(t_msh *msh, char *str, int *j)
 {
+	int	i;
+	int error;
+
+	i = *j;
+	error = 0;
 	if (str[i] == '>')
 	{
 		if (str[++i] == '>')
-			ft_redirect_output(str, &i, msh, 2);
+			error = ft_redirect_output(str, &i, msh, 2);
 		else
-			ft_redirect_output(str, &i, msh, 1);
+			error = ft_redirect_output(str, &i, msh, 1);
 	}
 	else
 	{
 		if (str[++i] == '<')
-			ft_stop_word(str, &i, msh);
+			error = ft_stop_word(str, &i, msh);
 		else
-			ft_redirect_input(str, &i, msh);
+			error = ft_redirect_input(str, &i, msh);
 	}
-	return (i);
+	*j = i;
+	return (error);
 }
 
 int	ft_arg_len(char *str, int i)
@@ -350,7 +364,7 @@ char	*ft_open_quotes(char *str, char **env)
 	return (str);
 }
 
-t_msh	*ft_new_command(t_msh *msh, char *str, int *k)
+int	ft_new_command(t_msh *msh, char *str, int *k)
 {
 	int	i;
 
@@ -360,12 +374,12 @@ t_msh	*ft_new_command(t_msh *msh, char *str, int *k)
 	while (str[i] == ' ')
 		i++;
 	if (str[i] == '\0' && str[i] != '|' && str[i] != '>' && str[i] != '<')
-		exit(ft_error("pipe error"));
+		return (1);
 	msh->next = ft_mshnew();
 	msh = msh->next;
 	msh->argv = (char **)malloc(sizeof(char *) * ft_argc(str, i));
 	*k = i;
-	return (msh);
+	return (0);
 }
 
 int	ft_check_open_quotes(char *str)
@@ -376,30 +390,44 @@ int	ft_check_open_quotes(char *str)
 	while (str[i])
 	{
 		if (str[i] == '\"')
+		{
 			while (str[++i] != '\"')
+			{
+				// if (str[i] == '\\')
+				// 	i += 2;
 				if (str[i] == '\0')
 					return (1);
+			}
+		}
 		if (str[i] ==  '\'')
+		{
 			while (str[++i] != '\'')
+			{
+				// if (str[i] == '\\')
+				// 	i += 2;
 				if (str[i] == '\0')
 					return (1);
+			}
+		}
 		i++;
 	}
 	return (0);
 }
 
-t_msh	*ft_parser(char *str, char **env)
+int	ft_parser(t_msh *msh, char *str, char **env)
 {
 	int		i;
 	int		n;
-	t_msh	*msh;
+	// t_msh	*msh;
 	t_msh	*save_msh;
 
 	if (ft_check_open_quotes(str))
-		exit(ft_error("syntax error: open quotes"));
-	msh = ft_mshnew();
+		return (ft_error("syntax error: open quotes"));
+	// msh = ft_mshnew();
 	save_msh = msh;
-	i = ft_check_start(str);
+	i = 0;
+	if (ft_check_start(str, &i))
+		return (1);
 	msh->argv = (char **)malloc(sizeof(char *) * ft_argc(str, i));
 	while (str[i])
 	{
@@ -409,12 +437,18 @@ t_msh	*ft_parser(char *str, char **env)
 		i += n;
 		i = ft_skip_space(str, i);
 		if (str[i] == '>' || str[i] == '<')
-			i = ft_redirect(msh, str, i);
+			if (ft_redirect(msh, str, &i))
+				return (1);
 		i = ft_skip_space(str, i);
 		if (str[i] == '|')
-			msh = ft_new_command(msh, str, &i);
+		{
+			if (ft_new_command(msh, str, &i))
+				return (ft_error("pipe error"));
+			msh = msh->next;
+		}
 	}
-	return (save_msh);
+	msh = save_msh;
+	return (0);
 }
 
 // int main(int argc, char **argv, char **env)
@@ -424,15 +458,19 @@ t_msh	*ft_parser(char *str, char **env)
 // 	t_msh *tmp;
 // 	int i;
 // 	int j;
+// 	int flag;
+
 // 	while (1)
 // 	{
+// 		flag = 0;
 // 		str = readline("minishell>");
 // 		add_history(str);
-
-// 		msh = ft_parser(str, env);
+// 		msh = ft_mshnew();
+// 		if (ft_parser(msh, str, env))
+// 			flag = 1;
 
 // 		j = 1;
-// 		while(msh)
+// 		while(msh && !flag)
 // 		{
 // 			printf("*** command %d ***\n", j);
 // 			printf("argc: %d\n", msh->argc);
