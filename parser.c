@@ -6,7 +6,7 @@
 /*   By: rchau <rchau@student.21-school.ru>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/02 20:50:40 by rchau             #+#    #+#             */
-/*   Updated: 2022/01/02 21:14:39 by rchau            ###   ########.fr       */
+/*   Updated: 2022/01/03 20:42:25 by rchau            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,7 @@ int	ft_new_command(t_msh **msh_p, char *str, int *k)
 		return (1);
 	msh->next = ft_mshnew();
 	msh = msh->next;
-	msh->argv = (char **)malloc(sizeof(char *) * ft_argc(str, i));
+	msh->argv = (char **)malloc(sizeof(char *) * (ft_argc(str, i) + 1));
 	*k = i;
 	*msh_p = msh;
 	return (0);
@@ -85,8 +85,7 @@ int	ft_check_start(char *str, int *j)
 	if (ft_check_open_quotes(str))
 		return (ft_error("syntax error: open quotes"));
 	i = 0;
-	while (str[i] == ' ')
-		i++;
+	i = ft_skip_space(str, i);
 	if (str[i] == '|' || str[i] == ';')
 		return (ft_error("syntax error"));
 	*j = i;
@@ -100,14 +99,16 @@ int	ft_parser(t_msh *msh, char *str, char **env)
 
 	if (ft_check_start(str, &i))
 		return (1);
-	msh->argv = (char **)malloc(sizeof(char *) * ft_argc(str, i));
+	msh->argv = (char **)malloc(sizeof(char *) * (ft_argc(str, i) + 1));
+	msh->argv[msh->argc] = NULL;
 	while (str[i])
 	{
 		n = ft_arg_len(str, i);
 		if (str[i] != ' ' && str[i] != '|' && str[i] != '>' && str[i] != '<')
 			msh->argv[msh->argc] = ft_open_quotes(ft_substr(str, i, n), env);
-		if (msh->argv[msh->argc][0])
+		if (msh->argv[msh->argc])
 			msh->argc++;
+		msh->argv[msh->argc] = NULL;
 		i = ft_skip_space(str, i + n);
 		if (str[i] == '>' || str[i] == '<')
 			if (ft_redirect(msh, str, &i))

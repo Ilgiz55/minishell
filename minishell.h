@@ -6,7 +6,7 @@
 /*   By: rchau <rchau@student.21-school.ru>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/02 21:05:48 by rchau             #+#    #+#             */
-/*   Updated: 2022/01/02 21:13:41 by rchau            ###   ########.fr       */
+/*   Updated: 2022/01/03 17:38:28 by rchau            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,9 @@
 # include <readline/history.h>
 # include <stdlib.h>
 # include <fcntl.h>
+# include <unistd.h>
+#include <sys/types.h>
+#include <dirent.h>
 
 typedef struct s_msh
 {

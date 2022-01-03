@@ -24,7 +24,7 @@ int main(int argc, char **argv, char **env)
 			printf("*** command %d ***\n", j);
 			printf("argc: %d\n", msh->argc);
 			i = 0;
-			while(i < msh->argc)
+			while(i <= msh->argc)
 			{
 				printf("argv[%d]: %s\n", i, msh->argv[i]);
 				free(msh->argv[i]);

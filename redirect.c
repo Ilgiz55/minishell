@@ -6,7 +6,7 @@
 /*   By: rchau <rchau@student.21-school.ru>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/02 21:07:21 by rchau             #+#    #+#             */
-/*   Updated: 2022/01/02 21:07:26 by rchau            ###   ########.fr       */
+/*   Updated: 2022/01/02 21:51:54 by rchau            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,7 +114,7 @@ char	*ft_get_file_name(char *str, int *i)
 	char	*file_name;
 
 	j = *i;
-	while (str[*i] && (str[*i] != ' ' && str[*i] != '|'))
+	while (str[*i] && (str[*i] != ' ' && str[*i] != '\t' && str[*i] != '|'))
 		*i += 1;
 	file_name = ft_substr(str, j, *i - j);
 	return (file_name);

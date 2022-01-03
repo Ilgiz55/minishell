@@ -6,7 +6,7 @@
 /*   By: rchau <rchau@student.21-school.ru>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/02 21:05:31 by rchau             #+#    #+#             */
-/*   Updated: 2022/01/02 21:07:03 by rchau            ###   ########.fr       */
+/*   Updated: 2022/01/03 20:46:35 by rchau            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,8 +25,8 @@ t_msh	*ft_mshnew(void)
 	element = (t_msh *)malloc(sizeof(*element));
 	element->argc = 0;
 	element->op = 0;
-	element->fdin = 0;
-	element->fdout = 1;
+	element->fdin = dup(0);
+	element->fdout = dup(1);
 	element->next = NULL;
 	return (element);
 }
@@ -39,7 +39,7 @@ int	ft_error(char *str)
 
 int	ft_skip_space(char *str, int i)
 {
-	while (str[i] == ' ')
+	while (str[i] == ' ' || str[i] =='\t')
 		i++;
 	return (i);
 }
