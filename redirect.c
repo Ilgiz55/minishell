@@ -6,7 +6,7 @@
 /*   By: rchau <rchau@student.21-school.ru>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/02 21:07:21 by rchau             #+#    #+#             */
-/*   Updated: 2022/01/02 21:51:54 by rchau            ###   ########.fr       */
+/*   Updated: 2022/01/05 12:11:49 by rchau            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,9 +22,10 @@ int	ft_redirect(t_msh *msh, char *str, int *j)
 	if (str[i] == '>')
 	{
 		if (str[++i] == '>')
-			error = ft_redirect_output(str, &i, msh, 2);
+			msh->write_mode = 2;
 		else
-			error = ft_redirect_output(str, &i, msh, 1);
+			msh->write_mode = 1;
+		error = ft_redirect_output(str, &i, msh);
 	}
 	else
 	{
@@ -41,30 +42,32 @@ int	ft_redirect_input(char *str, int *j, t_msh *msh)
 {
 	char	*file_name;
 	int		i;
+	int fd;
 
 	i = *j;
 	i = ft_skip_space(str, i);
 	if (str[i] == '>' || str[i] == ';' || str[i] == '|' || str[i] == '\0')
 		return (ft_error("syntax error"));
 	file_name = ft_get_file_name(str, &i);
-	if (msh->fdin > 0)
-		close(msh->fdin);
-	msh->fdin = open(file_name, O_RDONLY, 0644);
-	if (msh->fdin < 0)
+	fd = open(file_name, O_RDONLY, 0644);
+	if (fd < 0)
 	{
 		printf("%s: No such file or directory\n", file_name);
 		free(file_name);
 		return (1);
 	}
+	close(fd);
+	msh->infile = ft_strdup(file_name);
 	free(file_name);
 	*j = i;
 	return (0);
 }
 
-int	ft_redirect_output(char *str, int *j, t_msh *msh, int flag)
+int	ft_redirect_output(char *str, int *j, t_msh *msh)
 {
 	char	*file_name;
 	int		i;
+	int		fd;
 
 	if (str[*j] == '>')
 		(*j)++;
@@ -73,12 +76,11 @@ int	ft_redirect_output(char *str, int *j, t_msh *msh, int flag)
 	if (str[i] == '<' || str[i] == ';' || str[i] == '|' || str[i] == '\0')
 		return (ft_error("syntax error"));
 	file_name = ft_get_file_name(str, &i);
-	if (msh->fdout > 2)
-		close(msh->fdout);
-	if (flag == 2)
-		msh->fdout = open(file_name, O_WRONLY | O_CREAT | O_APPEND, 0644);
-	else
-		msh->fdout = open(file_name, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+	fd = open(file_name, O_WRONLY | O_CREAT, 0644);
+	close(fd);
+	if (msh->outfile)
+		free(msh->outfile);
+	msh->outfile = ft_strdup(file_name);
 	free(file_name);
 	*j = i;
 	return (0);

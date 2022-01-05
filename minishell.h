@@ -6,7 +6,7 @@
 /*   By: rchau <rchau@student.21-school.ru>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/02 21:05:48 by rchau             #+#    #+#             */
-/*   Updated: 2022/01/03 17:38:28 by rchau            ###   ########.fr       */
+/*   Updated: 2022/01/05 13:09:24 by rchau            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,10 +28,16 @@ typedef struct s_msh
 
 	int		argc;
 	char	**argv;
-	char	op;   // '|'   NULL
+	// char	op;   // '|'   NULL
 	int		fdin;
 	int		fdout;
+	int		fdpipe[2];
+	int		pid;
+	char	*outfile;
+	char	*infile;
+	int		write_mode; // 2 - O_APPEND; 1 - O_TRUNC
 	struct s_msh *next;
+	struct s_msh *prev;
 }	t_msh;
 
 
@@ -57,7 +63,7 @@ int	ft_check_open_quotes(char *str);
 
 int	ft_redirect(t_msh *msh, char *str, int *j);
 int	ft_redirect_input(char *str, int *j, t_msh *msh);
-int	ft_redirect_output(char *str, int *j, t_msh *msh, int flag);
+int	ft_redirect_output(char *str, int *j, t_msh *msh);
 int	ft_stop_word(char *str, int *i, t_msh *msh);
 char	*ft_get_file_name(char *str, int *i);
 

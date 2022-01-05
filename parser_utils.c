@@ -6,7 +6,7 @@
 /*   By: rchau <rchau@student.21-school.ru>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/02 21:05:31 by rchau             #+#    #+#             */
-/*   Updated: 2022/01/03 20:46:35 by rchau            ###   ########.fr       */
+/*   Updated: 2022/01/05 11:11:18 by rchau            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,10 +24,12 @@ t_msh	*ft_mshnew(void)
 
 	element = (t_msh *)malloc(sizeof(*element));
 	element->argc = 0;
-	element->op = 0;
-	element->fdin = dup(0);
-	element->fdout = dup(1);
+	element->fdin = 0;
+	element->fdout = 1;
 	element->next = NULL;
+	element->prev = NULL;
+	element->outfile = NULL;
+	element->infile = NULL;
 	return (element);
 }
 
