@@ -6,7 +6,7 @@
 /*   By: rchau <rchau@student.21-school.ru>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/02 21:05:48 by rchau             #+#    #+#             */
-/*   Updated: 2022/01/05 13:09:24 by rchau            ###   ########.fr       */
+/*   Updated: 2022/01/05 17:20:26 by rchau            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,8 +20,11 @@
 # include <stdlib.h>
 # include <fcntl.h>
 # include <unistd.h>
-#include <sys/types.h>
-#include <dirent.h>
+# include <sys/types.h>
+# include <dirent.h>
+# include <signal.h>
+
+int exit_status;
 
 typedef struct s_msh
 {
@@ -69,7 +72,8 @@ char	*ft_get_file_name(char *str, int *i);
 
 char	*ft_get_env(char **env, char *key);
 void	ft_dollar(char **s, int *j, char **env);
+void	ft_exit_status(char **s, int *j);
+
+
 
 #endif
-
-

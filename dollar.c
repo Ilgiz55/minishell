@@ -6,7 +6,7 @@
 /*   By: rchau <rchau@student.21-school.ru>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/02 21:05:40 by rchau             #+#    #+#             */
-/*   Updated: 2022/01/02 21:06:51 by rchau            ###   ########.fr       */
+/*   Updated: 2022/01/05 17:31:59 by rchau            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,14 +38,37 @@ char	*ft_get_env(char **env, char *key)
 	return (ft_strdup(""));
 }
 
+void	ft_exit_status(char **s, int *j)
+{
+	char	**tmp;
+	char	*str;
+	char	*status;
+
+	*j += 1;
+	str = *s;
+	tmp = (char **)malloc(sizeof(char *) * 3);
+	status = ft_itoa(exit_status);
+	tmp[0] = ft_substr(str, 0, *j - 1);
+	tmp[1] = ft_strdup(str + *j + 1);
+	tmp[2] = ft_strjoin(tmp[0], status);
+	str = ft_strjoin(tmp[2], tmp[1]);
+	*j += 1;
+	ft_free_tmp(tmp, 3);
+	free(*s);
+	free(status);
+	*s = str;
+}
+
 void	ft_dollar(char **s, int *j, char **env)
 {
 	int		i;
 	char	**tmp;
 	char	*str;
 
-	i = *j;
 	str = *s;
+	if (str[*j + 1] == '?')
+		return(ft_exit_status(s, j));
+	i = *j;
 	tmp = (char **)malloc(sizeof(char *) * 5);
 	while (str[++i])
 		if (str[i] != '_' && !ft_isalnum(str[i]))
@@ -57,9 +80,8 @@ void	ft_dollar(char **s, int *j, char **env)
 	tmp[2] = ft_substr(str, 0, *j - 1);
 	tmp[3] = ft_strdup(str + i);
 	tmp[4] = ft_strjoin(tmp[2], tmp[1]);
-	str = ft_strjoin(tmp[4], tmp[3]);
+	free(*s);
+	*s = ft_strjoin(tmp[4], tmp[3]);
 	*j = i - 1;
 	ft_free_tmp(tmp, 5);
-	free(*s);
-	*s = str;
 }

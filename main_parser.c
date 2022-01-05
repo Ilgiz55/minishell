@@ -9,6 +9,10 @@
 // 	int j;
 // 	int flag;
 
+	
+
+// 	exit_status = 12345;
+
 // 	while (1)
 // 	{
 // 		flag = 0;
@@ -31,7 +35,6 @@
 // 				i++;
 // 			}
 // 			free(msh->argv);
-// 			printf("op: %c\n", msh->op);
 // 			printf("fdin: %d, fdout: %d\n", msh->fdin, msh->fdout);
 // 			tmp = msh;
 // 			msh = msh->next;

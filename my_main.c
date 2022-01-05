@@ -122,6 +122,8 @@ void	ft_exec(t_msh *msh, char **env)
 		printf("%s: command not found\n", msh->argv[0]);
 }
 
+
+
 int main(int argc, char **argv, char **env)
 {
 	char *str;
@@ -129,11 +131,13 @@ int main(int argc, char **argv, char **env)
 	int tmpin;
 	int tmpout;
 
+	exit_status = 0;
+
 	while(1)
 	{
 		tmpin = dup(0);
 		tmpout = dup(1);
-		str = readline("mini$ ");
+		str = readline("\033[1;32mminishell$ \033[0m");
 		if (*str != '\0')
 			add_history(str);
 		msh = ft_mshnew();
