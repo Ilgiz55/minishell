@@ -27,6 +27,7 @@ void	cd_chdirs(char *sup, char **env)
 		exit_status = 0;
 	}
 	free(oldpwd);
+	
 }
 
 void	cd_currpwd(char **env)
