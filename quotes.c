@@ -18,6 +18,7 @@ void	ft_double_quotes(char **s, int *j, char **env)
 	char	**tmp;
 	char	*str;
 
+	
 	i = *j + 1;
 	tmp = (char **)malloc(sizeof(char *) * 4);
 	ft_check_dollar_in_quotes(s, &i, env);
