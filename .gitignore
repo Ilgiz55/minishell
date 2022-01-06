@@ -8,3 +8,4 @@ test.c
 /.vscode/
 /sasha_files/
 to_do.txt
+.*

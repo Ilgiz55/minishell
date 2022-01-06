@@ -41,27 +41,28 @@ void	free_mass(char **mass)
 	mass = NULL;
 }
 
-void	one_mas_fr_two(char ***str, char *from)
+void	one_mas_fr_two(t_sup *sup, char *from)
 {
 	int 	i;
 	char	**mass;
 
 	i = 0;
-	while((*str)[i])
+	while(sup->env[i])
+	{
 		i++;
+	}
 	mass = (char **)malloc(sizeof(char *) * (i + 2));
 	i = 0;
-	while ((*str)[i])
+	while ((sup->env)[i])
 	{
-		mass[i] = malloc(sizeof(char *) * ft_strlen((*str)[i]));
-		ft_memcpy(mass[i], (*str)[i], ft_strlen((*str)[i]));
+		mass[i] = ft_strdup((sup->env)[i]);
 		i++;
 	}
 	mass[i] = malloc(sizeof(char) * (ft_strlen(from)));
 	ft_memcpy(mass[i], from, ft_strlen(from));
-	free_mass(*str);
+	free_mass(sup->env);
 	mass[i + 1] = NULL;
-	*str = mass;
+	sup->env = mass;
 }
 
 int	env_search_same(char *arg, char **env)
@@ -78,10 +79,14 @@ int	env_search_same(char *arg, char **env)
 	{
 		j = 0;
 		while (env[i][j] != '=' && env[i][j])
+		{
 			j++;
-		if (!(ft_memcmp(arg, env[i], j) && k == j))
+		}
+		if (!ft_memcmp(arg, env[i], j) && k == j)
+		{
 			return (i);
+		}
 		i++;
 	}
-	return (0);
+	return (-1);
 }
