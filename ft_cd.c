@@ -6,7 +6,7 @@ void	cd_chdirs(char *sup, char **env)
 	int j;
 	char *oldpwd;
 
-	oldpwd = malloc(sizeof(1024,1));
+	oldpwd = malloc(sizeof(char) * 1024);
 	getcwd(oldpwd, 1024);
 	if (chdir(sup))
 		exit_status = error_nsfod("cd",sup);
@@ -16,7 +16,7 @@ void	cd_chdirs(char *sup, char **env)
 		if (i >= 0)
 		{
 			free(env[i]);
-			env[i] = ft_strjoin("OLDPWD=\0", oldpwd);
+			env[i] = ft_strjoin("OLDPWD=", oldpwd);
 		}
 		j = env_search_same("PWD\0", env);
 		if (j >=0)
@@ -33,7 +33,7 @@ void	cd_currpwd(char **env)
 {
 	char *sup;
 
-	sup = malloc(sizeof(1024, 1));
+	sup = malloc(sizeof(char) * 1024);
 	if (getcwd(sup, 1024))
 		cd_chdirs(sup, env);
 	else
@@ -49,13 +49,13 @@ void	cd_prevpwd(char **env)
 	char *sup;
 	char *temp;
 
-	sup = malloc(sizeof(1024, 1));
+	sup = malloc(sizeof(char) * 1024);
 	if (getcwd(sup, 1024))
 	{
 		temp = ft_strrchr(sup, '/');
 		while (*temp)
 		{
-			temp = NULL;
+			*temp = '\0';
 			temp++;
 		}
 		cd_chdirs(sup, env);
@@ -116,14 +116,14 @@ void	cd_home(char **env)
 
 int ft_cd(char **arg, char **env)
 {
-	if (!ft_strncmp(arg[1], "..\0", 3))
+	if (!arg[1])
+		cd_home(env);
+	else if (!ft_strncmp(arg[1], "..\0", 3))
 		cd_prevpwd(env);
 	else if (!ft_strncmp(arg[1], ".\0", 2))
 		cd_currpwd(env);
 	else if (!ft_strncmp(arg[1], "-\0", 2))
 		cd_oldpwd(env);
-	else if (!arg[1])
-		cd_home(env);
 	else
 		cd_chdirs(arg[1], env);
 	return (0);

@@ -6,14 +6,14 @@
 /*   By: rchau <rchau@student.21-school.ru>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/02 21:05:48 by rchau             #+#    #+#             */
-/*   Updated: 2022/01/06 14:32:26 by rchau            ###   ########.fr       */
+/*   Updated: 2022/01/06 14:49:53 by rchau            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
-//# include "libft/libft.h"
+# include "libft/libft.h"
 # include <stdio.h>
 # include <readline/readline.h>
 # include <readline/history.h>
