@@ -4,7 +4,7 @@ void	cd_chdirs(char *sup, char **env)
 {
 	int i;
 	int j;
-	char *oldpwd;
+	char *oldpwd;//drgrtghrf
 
 	oldpwd = malloc(sizeof(1024,1));
 	getcwd(oldpwd, 1024);
