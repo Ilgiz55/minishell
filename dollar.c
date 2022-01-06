@@ -6,7 +6,7 @@
 /*   By: rchau <rchau@student.21-school.ru>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/02 21:05:40 by rchau             #+#    #+#             */
-/*   Updated: 2022/01/05 17:31:59 by rchau            ###   ########.fr       */
+/*   Updated: 2022/01/06 15:45:33 by rchau            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ char	*ft_get_env(char **env, char *key)
 			while (env[i][j] && env[i][j] != '=')
 				j++;
 			answer = ft_substr(env[i], 0, j);
-			if (ft_strncmp(key, answer, ft_strlen(key)) == 0)
+			if (ft_strncmp(key, answer, ft_strlen(key) | ft_strlen(answer)) == 0)
 			{
 				free(answer);
 				return (ft_substr(env[i], j + 1, ft_strlen(env[i]) - j));

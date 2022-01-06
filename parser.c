@@ -6,7 +6,7 @@
 /*   By: rchau <rchau@student.21-school.ru>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/02 20:50:40 by rchau             #+#    #+#             */
-/*   Updated: 2022/01/05 11:12:00 by rchau            ###   ########.fr       */
+/*   Updated: 2022/01/06 16:29:16 by rchau            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,11 +82,12 @@ int	ft_check_start(char *str, int *j)
 {
 	int	i;
 
-	if (*str == '\0')
+	i = 0;
+	i = ft_skip_space(str, i);
+	if (str[i] == '\0')
 		return (1);
 	if (ft_check_open_quotes(str))
 		return (ft_error("syntax error: open quotes"));
-	i = 0;
 	i = ft_skip_space(str, i);
 	if (str[i] == '|' || str[i] == ';')
 		return (ft_error("syntax error"));

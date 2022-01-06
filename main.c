@@ -98,7 +98,7 @@ char *ft_command(char *str, char **env)
 	char *tmp;
 	int i;
 
-	if (str[0] == '.' && str[1] == '/')
+	if ((str[0] == '.' && str[1] == '/') || str[0] == '/')
 		return (str);
 	dir = ft_command_dir(str, env);
 	if (!dir)
@@ -165,7 +165,9 @@ int main(int argc, char **argv, char **env)
 	t_msh *msh;
 	int tmpin;
 	int tmpout;
-	void *sup;
+	t_sup *sup;
+
+	exit_status = 0;
 
 	sup = malloc(sizeof(t_sup));
 	env_cpy(env, sup);
@@ -173,11 +175,11 @@ int main(int argc, char **argv, char **env)
 	{
 		tmpin = dup(0);
 		tmpout = dup(1);
-		str = readline("mini$ ");
+		str = readline("\033[1;32mminishell$ \033[0m");
 		if (*str != '\0')
 			add_history(str);
 		msh = ft_mshnew();
-		if (!ft_parser(msh, str, env))
+		if (!ft_parser(msh, str, sup->env))
 		{
 			while(msh)
 			{
