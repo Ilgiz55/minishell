@@ -6,7 +6,7 @@
 /*   By: rchau <rchau@student.21-school.ru>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/02 21:07:21 by rchau             #+#    #+#             */
-/*   Updated: 2022/01/05 12:11:49 by rchau            ###   ########.fr       */
+/*   Updated: 2022/01/07 13:17:50 by rchau            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,17 +42,20 @@ int	ft_redirect_input(char *str, int *j, t_msh *msh)
 {
 	char	*file_name;
 	int		i;
-	int fd;
+	int		fd;
+	char	*s;
 
 	i = *j;
 	i = ft_skip_space(str, i);
 	if (str[i] == '>' || str[i] == ';' || str[i] == '|' || str[i] == '\0')
-		return (ft_error("syntax error"));
+		return (ft_error("syntax error", 258));
 	file_name = ft_get_file_name(str, &i);
 	fd = open(file_name, O_RDONLY, 0644);
 	if (fd < 0)
 	{
-		printf("%s: No such file or directory\n", file_name);
+		s = ft_strjoin(file_name, ": No such file or directory");
+		ft_error(s, 1);
+		free(s);
 		free(file_name);
 		return (1);
 	}
@@ -74,7 +77,7 @@ int	ft_redirect_output(char *str, int *j, t_msh *msh)
 	i = *j;
 	i = ft_skip_space(str, i);
 	if (str[i] == '<' || str[i] == ';' || str[i] == '|' || str[i] == '\0')
-		return (ft_error("syntax error"));
+		return (ft_error("syntax error", 258));
 	file_name = ft_get_file_name(str, &i);
 	fd = open(file_name, O_WRONLY | O_CREAT, 0644);
 	close(fd);
@@ -94,7 +97,7 @@ int	ft_stop_word(char *str, int *i, t_msh *msh)
 	*i = ft_skip_space(str, ++(*i));
 	if (str[*i] == '>' || str[*i] == '<' || str[*i] == ';' || \
 		str[*i] == '|' || str[*i] == '\0')
-		return (ft_error("syntax error"));
+		return (ft_error("syntax error", 258));
 	stop_word = ft_get_stop_word(str, i);
 	new_word = readline(">");
 	while (1)

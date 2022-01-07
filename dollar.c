@@ -6,7 +6,7 @@
 /*   By: rchau <rchau@student.21-school.ru>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/02 21:05:40 by rchau             #+#    #+#             */
-/*   Updated: 2022/01/06 15:45:33 by rchau            ###   ########.fr       */
+/*   Updated: 2022/01/07 13:14:42 by rchau            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,8 @@ char	*ft_get_env(char **env, char *key)
 			while (env[i][j] && env[i][j] != '=')
 				j++;
 			answer = ft_substr(env[i], 0, j);
-			if (ft_strncmp(key, answer, ft_strlen(key) | ft_strlen(answer)) == 0)
+			if (ft_strncmp(key, answer, ft_strlen(key) | \
+				ft_strlen(answer)) == 0)
 			{
 				free(answer);
 				return (ft_substr(env[i], j + 1, ft_strlen(env[i]) - j));
@@ -47,7 +48,7 @@ void	ft_exit_status(char **s, int *j)
 	*j += 1;
 	str = *s;
 	tmp = (char **)malloc(sizeof(char *) * 3);
-	status = ft_itoa(exit_status);
+	status = ft_itoa(g_status);
 	tmp[0] = ft_substr(str, 0, *j - 1);
 	tmp[1] = ft_strdup(str + *j + 1);
 	tmp[2] = ft_strjoin(tmp[0], status);
@@ -67,7 +68,7 @@ void	ft_dollar(char **s, int *j, char **env)
 
 	str = *s;
 	if (str[*j + 1] == '?')
-		return(ft_exit_status(s, j));
+		return (ft_exit_status(s, j));
 	i = *j;
 	tmp = (char **)malloc(sizeof(char *) * 5);
 	while (str[++i])

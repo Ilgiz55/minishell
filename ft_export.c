@@ -75,14 +75,14 @@ int	ft_export(char **argv, t_sup *sup)
 	i = 0;
 	if (!argv[1])
 	{
-		exit_status = env_sort(sup->env);
-		return (exit_status);
+		g_status = env_sort(sup->env);
+		return (g_status);
 	}
 	while (argv[++i])
 	{
 		if (check_argv_ex(argv[i]))
 		{
-			exit_status = error_nva(argv[0], argv[i]);
+			g_status = error_nva(argv[0], argv[i]);
 		}
 		else
 		{
@@ -96,8 +96,8 @@ int	ft_export(char **argv, t_sup *sup)
 			{
 				one_mas_fr_two(sup, argv[i]);
 			}
-			exit_status = 0;
+			g_status = 0;
 		}
 	}
-	return (exit_status);
+	return (g_status);
 }
