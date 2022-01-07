@@ -6,7 +6,7 @@ int	error_nsfod(char *comm, char *arg)
 	write(1, ": ", 2);
 	write(1, arg, ft_strlen(arg));
 	write(1, ": No such file or directory\n", 28);
-	exit_status = 1;
+	g_status = 1;
 	return (1);
 }
 

@@ -10,7 +10,7 @@ int ft_env(char **argv, char **env)
 		write(1, "env: setenv ", 12);
 		write(1, argv[1], ft_strlen(argv[i + 1]));
 		write(1, ": Invalid argument\n", 19);
-		exit_status = 1;
+		g_status = 1;
 		return (1);
 	}
 	else if (argv[1])
@@ -18,7 +18,7 @@ int ft_env(char **argv, char **env)
 		write(1, "env: ", 5);
 		write(1, argv[1], ft_strlen(argv[i + 1]));
 		write(1, ": No such file or directory\n", 28);
-		exit_status = 127;
+		g_status = 127;
 		return (1);
 	}
 	else
@@ -33,6 +33,6 @@ int ft_env(char **argv, char **env)
 			i++;
 		}
 	}
-	exit_status = 0;
+	g_status = 0;
 	return (0);
 }

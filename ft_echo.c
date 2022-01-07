@@ -4,7 +4,7 @@ void	status_writing()
 {
 	char *st;
 
-	st = ft_itoa(exit_status);
+	st = ft_itoa(g_status);
 	write(1, st, ft_strlen(st));
 	free(st);
 }
@@ -35,6 +35,6 @@ int	ft_echo(char **argv, char **env)
 	}
 	if (!argv[1] || ft_strncmp(argv[1], "-n\0", 3))
 		write(1, "\n", 1);
-	exit_status = 0;
+	g_status = 0;
 	return (0);
 }

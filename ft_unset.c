@@ -5,23 +5,23 @@ int unset_checker(char *argv)
 	int	i;
 	int j;
 
-	exit_status = 0;
+	g_status = 0;
 	i = 0;
 	if (argv[0] != '_' && !ft_isalpha(argv[0]))
 	{
-		exit_status = error_nva("unset", argv);
-		return (exit_status);
+		g_status = error_nva("unset", argv);
+		return (g_status);
 	}
 	while (argv[i])
 	{
 		if (argv[i] != '_' && argv[i] != '=' && argv[i] != '+'
 		&& !ft_isalpha(argv[i]) && !ft_isdigit(argv[i]))
-			exit_status = error_nva("unset", argv);
+			g_status = error_nva("unset", argv);
 		if (argv[i] == '+' && argv[i + 1] != '=')
-			exit_status = error_nva("unset", argv);
+			g_status = error_nva("unset", argv);
 		i++;
 	}
-	return (exit_status);
+	return (g_status);
 }
 
 int uns_rewrite(char **env, int n)
@@ -61,11 +61,11 @@ int ft_unset(char **argv, char **env)
 			j = env_search_same(argv[i], env);
 			if (j >= 0)
 				uns_rewrite(env, j);
-			exit_status = 0;
+			g_status = 0;
 		}
 		i++;
 	}
-	return (exit_status);
+	return (g_status);
 }
 
 //while (str[i])

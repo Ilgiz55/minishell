@@ -6,7 +6,7 @@
 /*   By: rchau <rchau@student.21-school.ru>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/02 21:05:36 by rchau             #+#    #+#             */
-/*   Updated: 2022/01/02 21:07:10 by rchau            ###   ########.fr       */
+/*   Updated: 2022/01/07 13:16:57 by rchau            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,6 @@ void	ft_double_quotes(char **s, int *j, char **env)
 	char	**tmp;
 	char	*str;
 
-	
 	i = *j + 1;
 	tmp = (char **)malloc(sizeof(char *) * 4);
 	ft_check_dollar_in_quotes(s, &i, env);

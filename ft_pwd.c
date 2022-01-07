@@ -10,13 +10,13 @@ int ft_pwd()
 		write(1, path, ft_strlen(path));
 		write(1, "\n", 1);
 		free(path);
-		exit_status = 0;
+		g_status = 0;
 		return (0);
 	}
 	else
 	{
 		write(2, "PATH did not found\n", 19);
-		exit_status = 1;
+		g_status = 1;
 		return (1);
 	}
 }

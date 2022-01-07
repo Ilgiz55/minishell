@@ -6,7 +6,7 @@
 /*   By: rchau <rchau@student.21-school.ru>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/02 21:05:48 by rchau             #+#    #+#             */
-/*   Updated: 2022/01/06 14:49:53 by rchau            ###   ########.fr       */
+/*   Updated: 2022/01/07 16:18:39 by rchau            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,8 @@
 # include <dirent.h>
 # include <signal.h>
 
-int exit_status;
+int g_status;
+int pid;
 
 typedef struct s_msh
 {
@@ -44,11 +45,13 @@ typedef struct s_msh
 }	t_msh;
 
 typedef struct s_sup{
-	t_msh	msh;
+	// t_msh	*msh;
 	char 	**env;
 }	t_sup;
 
 /* ****** PARSER ****** */
+
+void rl_replace_line();
 
 int	ft_argc(char *str, int i);
 int	ft_arg_len(char *str, int i);
@@ -58,7 +61,7 @@ int	ft_parser(t_msh *msh, char *str, char **env);
 
 void	ft_free_tmp(char **tmp, int n);
 t_msh	*ft_mshnew(void);
-int	ft_error(char *str);
+int	ft_error(char *str, int i);
 int	ft_skip_space(char *str, int i);
 char	*ft_get_stop_word(char *str, int *j);
 
@@ -133,3 +136,6 @@ void	cd_home(char **env);
 //void	*ft_calloc(size_t	count, size_t	size);
 
 #endif
+
+
+// -lreadline  -L/Users/rchau/.brew/Cellar/readline/8.1.1/lib/ -I/Users/rchau/.brew/Cellar/readline/8.1.1/include

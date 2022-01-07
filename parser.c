@@ -6,7 +6,7 @@
 /*   By: rchau <rchau@student.21-school.ru>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/02 20:50:40 by rchau             #+#    #+#             */
-/*   Updated: 2022/01/06 16:29:16 by rchau            ###   ########.fr       */
+/*   Updated: 2022/01/07 13:16:21 by rchau            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,15 +82,18 @@ int	ft_check_start(char *str, int *j)
 {
 	int	i;
 
+	if (!str)
+		return (1);
 	i = 0;
+	*j = i;
 	i = ft_skip_space(str, i);
 	if (str[i] == '\0')
 		return (1);
 	if (ft_check_open_quotes(str))
-		return (ft_error("syntax error: open quotes"));
+		return (ft_error("syntax error: open quotes", 1));
 	i = ft_skip_space(str, i);
 	if (str[i] == '|' || str[i] == ';')
-		return (ft_error("syntax error"));
+		return (ft_error("syntax error: pipe error", 258));
 	*j = i;
 	return (0);
 }
@@ -118,7 +121,7 @@ int	ft_parser(t_msh *msh, char *str, char **env)
 				return (1);
 		i = ft_skip_space(str, i);
 		if (ft_new_command(&msh, str, &i))
-			return (ft_error("pipe error"));
+			return (ft_error("syntax error", 258));
 	}
 	return (0);
 }

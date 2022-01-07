@@ -6,7 +6,7 @@
 /*   By: rchau <rchau@student.21-school.ru>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/02 21:05:31 by rchau             #+#    #+#             */
-/*   Updated: 2022/01/05 14:15:17 by rchau            ###   ########.fr       */
+/*   Updated: 2022/01/07 13:15:45 by rchau            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,15 +33,20 @@ t_msh	*ft_mshnew(void)
 	return (element);
 }
 
-int	ft_error(char *str)
+int	ft_error(char *str, int i)
 {
-	printf("%s\n", str);
+	char	*s;
+
+	s = ft_strjoin("minishell: ", str);
+	printf("%s\n", s);
+	free(s);
+	g_status = i;
 	return (1);
 }
 
 int	ft_skip_space(char *str, int i)
 {
-	while (str[i] == ' ' || str[i] =='\t')
+	while (str[i] && (str[i] == ' ' || str[i] == '\t'))
 		i++;
 	return (i);
 }
