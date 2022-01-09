@@ -1,34 +1,55 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_exit.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: laubrey <marvin@42.fr>                     +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/01/08 19:01:37 by laubrey           #+#    #+#             */
+/*   Updated: 2022/01/08 19:01:40 by laubrey          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
-void error_tma(char *arg)
-{
-	write(1, arg, ft_strlen(arg));
-	write(1, ": too many arguments\n", 21);
-}
-
-int error_nar(char *comm, char *arg)
-{
-	write(1, comm, ft_strlen(comm));
-	write(1, ": ", 2);
-	write(1, arg, ft_strlen(arg));
-	write(1, ": numeric argument required\n", 28);
-	return (1);
-}
-
-int ft_exit(char **arg, char **env)
+int	exit_check(char *arg, char *com)
 {
 	int	i;
-	int j;
-	char *sup;
+	int	j;
 
 	i = -1;
-	if (!arg[1])
-		exit (0);
-	if (arg[2])
-		error_tma(arg[0]);
-	while (arg[1][++i])
-		if (!ft_isalnum(arg[1][i]) || i > 19)
-			if(error_nar(arg[0], arg[1]))
+	j = 0;
+	while (arg[++i])
+	{
+		if (arg[i] == '-' || arg[i] == '+')
+		{
+			j = 1;
+			i++;
+		}
+		if (!ft_isdigit(arg[i]) || i + j > 21)
+			if (error_nar(com, arg))
 				return (1);
+	}
 	return (0);
+}
+
+int	ft_exit(char **arg, char **env)
+{
+	int	i;
+	int	j;
+
+	j = 0;
+	if (arg[1] && arg[2])
+		if (error_tma(arg[0]))
+			return (1);
+	if (arg[1])
+		if (exit_check(arg[1], arg[0]))
+			return (1);
+	i = env_search_same("SHLVL", env);
+	if (i >= 0 && env[i][6] != '2')
+		env[i][6] = env[i][6] - 1;
+	else if (!arg[1])
+		exit (0);
+	i = ft_atoi(arg[1]);
+	exit (i);
 }

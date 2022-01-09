@@ -1,8 +1,20 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_echo.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: laubrey <marvin@42.fr>                     +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/01/08 19:01:15 by laubrey           #+#    #+#             */
+/*   Updated: 2022/01/08 19:01:18 by laubrey          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
-void	status_writing()
+void	status_writing(void)
 {
-	char *st;
+	char	*st;
 
 	st = ft_itoa(g_status);
 	write(1, st, ft_strlen(st));
@@ -11,8 +23,8 @@ void	status_writing()
 
 int	ft_echo(char **argv, char **env)
 {
-	int i;
-	int j;
+	int	i;
+	int	j;
 
 	i = 0;
 	if (argv[1] && !ft_strncmp(argv[1], "-n\0", 3))
@@ -35,6 +47,5 @@ int	ft_echo(char **argv, char **env)
 	}
 	if (!argv[1] || ft_strncmp(argv[1], "-n\0", 3))
 		write(1, "\n", 1);
-	g_status = 0;
 	return (0);
 }
