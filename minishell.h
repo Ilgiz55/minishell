@@ -6,7 +6,7 @@
 /*   By: rchau <rchau@student.21-school.ru>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/02 21:05:48 by rchau             #+#    #+#             */
-/*   Updated: 2022/01/07 16:18:39 by rchau            ###   ########.fr       */
+/*   Updated: 2022/01/09 16:10:45 by rchau            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,8 @@
 
 int g_status;
 int pid;
+
+extern int rl_catch_signals;
 
 typedef struct s_msh
 {
@@ -49,6 +51,7 @@ typedef struct s_sup{
 	char 	**env;
 }	t_sup;
 
+t_msh bla;
 /* ****** PARSER ****** */
 
 void rl_replace_line();

@@ -6,7 +6,7 @@
 /*   By: rchau <rchau@student.21-school.ru>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/02 21:05:31 by rchau             #+#    #+#             */
-/*   Updated: 2022/01/07 13:15:45 by rchau            ###   ########.fr       */
+/*   Updated: 2022/01/09 17:12:20 by rchau            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@ void	ft_free_tmp(char **tmp, int n)
 {
 	while (n--)
 		free(tmp[n]);
+	free(tmp);
 }
 
 t_msh	*ft_mshnew(void)
@@ -26,6 +27,8 @@ t_msh	*ft_mshnew(void)
 	element->argc = 0;
 	element->fdin = 0;
 	element->fdout = 1;
+	element->pid = 0;
+	element->write_mode = 0;
 	element->next = NULL;
 	element->prev = NULL;
 	element->outfile = NULL;

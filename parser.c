@@ -6,7 +6,7 @@
 /*   By: rchau <rchau@student.21-school.ru>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/02 20:50:40 by rchau             #+#    #+#             */
-/*   Updated: 2022/01/07 13:16:21 by rchau            ###   ########.fr       */
+/*   Updated: 2022/01/09 16:34:06 by rchau            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,7 +82,7 @@ int	ft_check_start(char *str, int *j)
 {
 	int	i;
 
-	if (!str)
+	if (*str == '\0')
 		return (1);
 	i = 0;
 	*j = i;
@@ -102,10 +102,13 @@ int	ft_parser(t_msh *msh, char *str, char **env)
 {
 	int		i;
 	int		n;
-
+	
+	i = 0;
 	if (ft_check_start(str, &i))
 		return (1);
 	msh->argv = (char **)malloc(sizeof(char *) * (ft_argc(str, i) + 1));
+	if (!msh->argv)
+		return (1);
 	msh->argv[msh->argc] = NULL;
 	while (str[i])
 	{
@@ -123,5 +126,7 @@ int	ft_parser(t_msh *msh, char *str, char **env)
 		if (ft_new_command(&msh, str, &i))
 			return (ft_error("syntax error", 258));
 	}
+	if(msh->argv[0] == '\0')
+		return(1);
 	return (0);
 }

@@ -191,25 +191,35 @@ void	ft_free_msh(t_msh *msh)
 	}
 }
 
+void	ft_handler(int sig)
+{
+	if (sig == SIGINT)
+	{
+		write(1, "\n", 1);
+		rl_on_new_line();
+		rl_replace_line("", 0);
+		rl_redisplay();
+	}
+}
+
 int	ft_exec(t_msh *msh, t_sup *sup)
 {
 	char	*com;
 	char *s;
 
-	com = ft_command(msh->argv[0], sup->env);
 	if (ft_if_builtin(msh))
 		return (ft_builtin(msh, sup));
-	else if (com)
+	com = ft_command(msh->argv[0], sup->env);
+	if (com)
 	{
-		pid = fork();
-		if (pid == 0)
+		msh->pid = fork();
+		if (msh->pid == 0)
 		{
 			execve(com, msh->argv, sup->env);
 			perror("execve");
 			exit(1);
 		}
-		waitpid(pid, &g_status, 0);
-		pid = 0;
+		waitpid(msh->pid, &g_status, 0);
 		free(com);
 		if (!WEXITSTATUS(g_status))
 			return (1);
@@ -221,16 +231,6 @@ int	ft_exec(t_msh *msh, t_sup *sup)
 	return(1);
 }
 
-// void	ft_handler(int sig)
-// {
-// 	if (sig == SIGINT && !pid)
-// 	{
-// 		write(1, "\n", 1);
-// 		rl_on_new_line();
-// 		rl_replace_line("", 0);
-// 		rl_redisplay();
-// 	}
-// }
 
 int main(int argc, char **argv, char **env)
 {
@@ -242,24 +242,28 @@ int main(int argc, char **argv, char **env)
 	t_msh *save_msh;
 
 	g_status = 0;
-	pid = 0;
+	rl_catch_signals = 0;
 
-	sup = malloc(sizeof(t_sup));
+	sup = (t_sup *)malloc(sizeof(t_sup));
 	env_cpy(env, sup);
 	while(1)
 	{
-		// signal(SIGINT, ft_handler);
+		signal(SIGINT, ft_handler);
 		signal(SIGQUIT, SIG_IGN);
 		tmpin = dup(0);
 		tmpout = dup(1);
+		str = NULL;
 		str = readline("minishell$ ");
-		if (str == NULL)
-			break; 
+		if (!str)
+		{
+			printf("exit\n");
+			break;
+		}
 		if (*str != '\0')
 			add_history(str);
 		msh = ft_mshnew();
 		save_msh = msh;
-		if (!ft_parser(msh, str, sup->env))
+		if (str && msh && !ft_parser(msh, str, sup->env))
 		{
 			while(msh)
 			{
@@ -273,6 +277,6 @@ int main(int argc, char **argv, char **env)
 		close(tmpin);
 		close(tmpout);
 		free(str);
-		ft_free_msh(save_msh);
+		// ft_free_msh(save_msh);
 	}
 }
