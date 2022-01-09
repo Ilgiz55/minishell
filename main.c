@@ -18,6 +18,9 @@ void	env_cpy(char **from, t_sup *sup)
 			exit (g_status);
 		}
 	}
+	i = env_search_same("SHLVL", sup->env);
+	if (i >= 0)
+		sup->env[i][6] = sup->env[i][6] + 1;
 }
 
 int	ft_builtin(t_msh *msh, t_sup *sup)
@@ -66,7 +69,6 @@ int	ft_if_builtin(t_msh *msh)
 	free(b_com);
 	return (0);
 }
-
 
 int	has_command(char *path, char *str)
 {
@@ -196,10 +198,10 @@ int	ft_exec(t_msh *msh, t_sup *sup)
 	char	*com;
 	char *s;
 
-	com = ft_command(msh->argv[0], sup->env);
 	if (ft_if_builtin(msh))
 		return (ft_builtin(msh, sup));
-	else if (com)
+	com = ft_command(msh->argv[0], sup->env);
+	if (com)
 	{
 		pid = fork();
 		if (pid == 0)
@@ -234,19 +236,18 @@ int	ft_exec(t_msh *msh, t_sup *sup)
 
 int main(int argc, char **argv, char **env)
 {
-	char *str;
-	t_msh *msh;
-	int tmpin;
-	int tmpout;
-	t_sup *sup;
-	t_msh *save_msh;
+	char	*str;
+	t_msh	*msh;
+	int		tmpin;
+	int		tmpout;
+	t_sup	*sup;
+	t_msh	*save_msh;
 
 	g_status = 0;
 	pid = 0;
-
 	sup = malloc(sizeof(t_sup));
 	env_cpy(env, sup);
-	while(1)
+	while (1)
 	{
 		// signal(SIGINT, ft_handler);
 		signal(SIGQUIT, SIG_IGN);
@@ -254,14 +255,14 @@ int main(int argc, char **argv, char **env)
 		tmpout = dup(1);
 		str = readline("minishell$ ");
 		if (str == NULL)
-			break; 
+			break ;
 		if (*str != '\0')
 			add_history(str);
 		msh = ft_mshnew();
 		save_msh = msh;
 		if (!ft_parser(msh, str, sup->env))
 		{
-			while(msh)
+			while (msh)
 			{
 				ft_pipe(msh, tmpin, tmpout);
 				ft_exec(msh, sup);
