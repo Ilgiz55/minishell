@@ -94,6 +94,7 @@ int	ft_stop_word(char *str, int *i, t_msh *msh)
 	char	*stop_word;
 	char	*new_word;
 
+	(void)msh;
 	*i = ft_skip_space(str, ++(*i));
 	if (str[*i] == '>' || str[*i] == '<' || str[*i] == ';' || \
 		str[*i] == '|' || str[*i] == '\0')

@@ -26,7 +26,7 @@ void	env_cpy(char **from, t_sup *sup)
 int	ft_builtin(t_msh *msh, t_sup *sup)
 {
 	if (!ft_strncmp(msh->argv[0], "echo\0", 5))
-		g_status = (ft_echo(msh->argv, sup->env));
+		g_status = (ft_echo(msh->argv));
 	else if (!ft_strncmp(msh->argv[0], "pwd\0", 4))
 		g_status = (ft_pwd());
 	else if (!ft_strncmp(msh->argv[0], "env\0", 4))
@@ -130,7 +130,6 @@ char	*ft_command(char *str, char **env)
 	char	*dir;
 	char	*com;
 	char	*tmp;
-	int		i;
 
 	if ((str[0] == '.' && str[1] == '/') || str[0] == '/')
 		return (ft_strdup(str));
@@ -243,6 +242,8 @@ int	main(int argc, char **argv, char **env)
 	t_sup	*sup;
 	t_msh	*save_msh;
 
+	(void)argc;
+	(void)argv;
 	g_status = 0;
 	pid = 0;
 	sup = malloc(sizeof(t_sup));

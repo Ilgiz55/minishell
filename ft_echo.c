@@ -12,16 +12,7 @@
 
 #include "minishell.h"
 
-void	status_writing(void)
-{
-	char	*st;
-
-	st = ft_itoa(g_status);
-	write(1, st, ft_strlen(st));
-	free(st);
-}
-
-int	ft_echo(char **argv, char **env)
+int	ft_echo(char **argv)
 {
 	int	i;
 	int	j;
@@ -33,15 +24,7 @@ int	ft_echo(char **argv, char **env)
 	{
 		j = -1;
 		while (argv[i][++j])
-		{
-			if (!ft_strncmp(&argv[i][j], "$?", 2))
-			{
-				status_writing();
-				j++;
-			}
-			else
 				write(1, &argv[i][j], 1);
-		}
 		if (argv[i + 1])
 			write(1, " ", 1);
 	}
