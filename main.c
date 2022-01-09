@@ -18,6 +18,9 @@ void	env_cpy(char **from, t_sup *sup)
 			exit (g_status);
 		}
 	}
+	i = env_search_same("SHLVL", sup->env);
+	if (i >= 0)
+		sup->env[i][6] = sup->env[i][6] + 1;
 }
 
 int	ft_builtin(t_msh *msh, t_sup *sup)
@@ -66,7 +69,6 @@ int	ft_if_builtin(t_msh *msh)
 	free(b_com);
 	return (0);
 }
-
 
 int	has_command(char *path, char *str)
 {
@@ -234,19 +236,17 @@ int	ft_exec(t_msh *msh, t_sup *sup)
 
 int main(int argc, char **argv, char **env)
 {
-	char *str;
-	t_msh *msh;
-	int tmpin;
-	int tmpout;
-	t_sup *sup;
-	t_msh *save_msh;
+	char	*str;
+	t_msh	*msh;
+	int		tmpin;
+	int		tmpout;
+	t_sup	*sup;
+	t_msh	*save_msh;
 
 	g_status = 0;
-	rl_catch_signals = 0;
-
 	sup = (t_sup *)malloc(sizeof(t_sup));
 	env_cpy(env, sup);
-	while(1)
+	while (1)
 	{
 		signal(SIGINT, ft_handler);
 		signal(SIGQUIT, SIG_IGN);
@@ -265,7 +265,7 @@ int main(int argc, char **argv, char **env)
 		save_msh = msh;
 		if (str && msh && !ft_parser(msh, str, sup->env))
 		{
-			while(msh)
+			while (msh)
 			{
 				ft_pipe(msh, tmpin, tmpout);
 				ft_exec(msh, sup);

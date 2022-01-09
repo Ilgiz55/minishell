@@ -6,7 +6,7 @@
 /*   By: rchau <rchau@student.21-school.ru>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/02 21:05:48 by rchau             #+#    #+#             */
-/*   Updated: 2022/01/09 16:10:45 by rchau            ###   ########.fr       */
+/*   Updated: 2022/01/09 19:42:43 by rchau            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,7 +89,7 @@ int		ft_echo(char **arg, char **env);
 void	status_writing();
 int		ft_exit(char **arg, char **env);
 int		error_nar(char *comm, char *arg);
-void	error_tma(char *arg);
+int		error_tma(char *arg);
 int		ft_export(char **arg, t_sup *sup);
 int		check_argv_ex(char *argv);
 void	print_quotes(char *str);

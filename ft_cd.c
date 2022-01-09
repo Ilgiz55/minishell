@@ -1,37 +1,20 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_cd.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: laubrey <marvin@42.fr>                     +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/01/08 19:00:11 by laubrey           #+#    #+#             */
+/*   Updated: 2022/01/08 19:00:18 by laubrey          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
-
-void	cd_chdirs(char *sup, char **env)
-{
-	int i;
-	int j;
-	char *oldpwd;
-
-	oldpwd = malloc(sizeof(char) * 1024);
-	getcwd(oldpwd, 1024);
-	if (chdir(sup))
-		g_status = error_nsfod("cd",sup);
-	else
-	{
-		i = env_search_same("OLDPWD\0", env);
-		if (i >= 0)
-		{
-			free(env[i]);
-			env[i] = ft_strjoin("OLDPWD=", oldpwd);
-		}
-		j = env_search_same("PWD\0", env);
-		if (j >=0)
-		{
-			free(env[j]);
-			env[j] = ft_strjoin("PWD=\0", sup);
-		}
-		g_status = 0;
-	}
-	free(oldpwd);
-}
 
 void	cd_currpwd(char **env)
 {
-	char *sup;
+	char	*sup;
 
 	sup = malloc(sizeof(char) * 1024);
 	if (getcwd(sup, 1024))
@@ -46,8 +29,8 @@ void	cd_currpwd(char **env)
 
 void	cd_prevpwd(char **env)
 {
-	char *sup;
-	char *temp;
+	char	*sup;
+	char	*temp;
 
 	sup = malloc(sizeof(char) * 1024);
 	if (getcwd(sup, 1024))
@@ -58,7 +41,8 @@ void	cd_prevpwd(char **env)
 			*temp = '\0';
 			temp++;
 		}
-		cd_chdirs(sup, env);
+		if (sup != '\0')
+			cd_chdirs(sup, env);
 	}
 	else
 	{
@@ -70,16 +54,17 @@ void	cd_prevpwd(char **env)
 
 void	cd_oldpwd(char **env)
 {
-	char *sup;
-	int i;
+	char	*sup;
+	int		i;
 
 	i = env_search_same("OLDPWD\0", env);
-	if (i >= 0 && env[i][5] != '\0')
+	if (i >= 0 && env[i][7] != '\0')
 	{
 		sup = ft_substr(env[i], 7, ft_strlen(&env[i][7]));
 		cd_chdirs(sup, env);
+		free(sup);
 	}
-	else if (i >= 0 && env[i][5] == '\0')//HOME="" не ошибка, возвращает 0, не делает ничего
+	else if (i >= 0 && env[i][7] == '\0')
 	{
 		write(1, "\n", 1);
 		cd_currpwd(env);
@@ -91,19 +76,19 @@ void	cd_oldpwd(char **env)
 	}
 }
 
-
 void	cd_home(char **env)
 {
-	char *sup;
-	int i;
+	char	*sup;
+	int		i;
 
 	i = env_search_same("HOME", env);
 	if (i >= 0 && env[i][5] != '\0')
 	{
 		sup = ft_substr(env[i], 5, ft_strlen(&env[i][5]));
 		cd_chdirs(sup, env);
+		free(sup);
 	}
-	else if (i >= 0 && env[i][5] == '\0')//HOME="" не ошибка, возвращает 0, не делает ничего
+	else if (i >= 0 && env[i][5] == '\0')
 		cd_currpwd(env);
 	else
 	{
@@ -112,9 +97,7 @@ void	cd_home(char **env)
 	}
 }
 
-
-
-int ft_cd(char **arg, char **env)
+int	ft_cd(char **arg, char **env)
 {
 	if (!arg[1])
 		cd_home(env);

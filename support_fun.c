@@ -1,33 +1,20 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   support_fun.c                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: laubrey <marvin@42.fr>                     +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/01/08 19:03:15 by laubrey           #+#    #+#             */
+/*   Updated: 2022/01/08 19:03:17 by laubrey          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
-
-int	error_nsfod(char *comm, char *arg)
-{
-	write(1, comm, ft_strlen(comm));
-	write(1, ": ", 2);
-	write(1, arg, ft_strlen(arg));
-	write(1, ": No such file or directory\n", 28);
-	g_status = 1;
-	return (1);
-}
-
-int	error_nva(char *comm, char *arg)
-{
-	write(1, comm, ft_strlen(comm));
-	write(1, ": \'", 3);
-	write(1, arg, ft_strlen(arg));
-	write(1, "\': not a valid identifier\n", 26);
-	return (1);
-}
-
-int error_malloc()
-{
-	write(1, "Malloc error\n", 13);
-	return (1);
-}
 
 void	free_mass(char **mass)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	while (mass[i])
@@ -43,11 +30,11 @@ void	free_mass(char **mass)
 
 void	one_mas_fr_two(t_sup *sup, char *from)
 {
-	int 	i;
+	int		i;
 	char	**mass;
 
 	i = 0;
-	while(sup->env[i])
+	while (sup->env[i])
 	{
 		i++;
 	}
@@ -67,9 +54,9 @@ void	one_mas_fr_two(t_sup *sup, char *from)
 
 int	env_search_same(char *arg, char **env)
 {
-	int i;
-	int j;
-	int k;
+	int	i;
+	int	j;
+	int	k;
 
 	i = 0;
 	k = 0;
@@ -89,4 +76,33 @@ int	env_search_same(char *arg, char **env)
 		i++;
 	}
 	return (-1);
+}
+
+void	cd_chdirs(char *sup, char **env)
+{
+	int		i;
+	int		j;
+	char	*oldpwd;
+
+	oldpwd = malloc(sizeof(char) * 1024);
+	getcwd(oldpwd, 1024);
+	if (chdir(sup))
+		g_status = error_nsfod("cd", sup);
+	else
+	{
+		i = env_search_same("OLDPWD\0", env);
+		if (i >= 0)
+		{
+			free(env[i]);
+			env[i] = ft_strjoin("OLDPWD=", oldpwd);
+		}
+		j = env_search_same("PWD\0", env);
+		if (j >= 0)
+		{
+			free(env[j]);
+			env[j] = ft_strjoin("PWD=\0", sup);
+		}
+		g_status = 0;
+	}
+	free(oldpwd);
 }
