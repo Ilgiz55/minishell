@@ -18,24 +18,27 @@ void	env_cpy(char **from, t_sup *sup)
 			exit (g_status);
 		}
 	}
+	i = env_search_same("SHLVL", sup->env);
+	if (i >= 0)
+		sup->env[i][6] = sup->env[i][6] + 1;
 }
 
 int	ft_builtin(t_msh *msh, t_sup *sup)
 {
-	if (!ft_strncmp(msh->argv[0], "echo\0", 5)) // Проверить что показывает после unset PATH должно bash:______:Command not found
-		return (ft_echo(msh->argv, sup->env));
-	else if (!ft_strncmp(msh->argv[0], "pwd\0", 4)) //Проверить выдает ли после unset PATH
-		return (ft_pwd());
-	else if (!ft_strncmp(msh->argv[0], "env\0", 4)) //Проверить выдает ли только те, что с =
-		return (ft_env(msh->argv, sup->env));
-	else if (!ft_strncmp(msh->argv[0], "export\0", 7)) //Множественный export сегается. Проблема в ft_command_dir dirp pass. Перепроверить на другой учетке
-		return (ft_export(msh->argv, sup));
-	else if (!ft_strncmp(msh->argv[0], "unset\0", 6)) //Проверить еще с export
-		return (ft_unset(msh->argv, sup->env));
+	if (!ft_strncmp(msh->argv[0], "echo\0", 5))
+		g_status = (ft_echo(msh->argv, sup->env));
+	else if (!ft_strncmp(msh->argv[0], "pwd\0", 4))
+		g_status = (ft_pwd());
+	else if (!ft_strncmp(msh->argv[0], "env\0", 4))
+		g_status = (ft_env(msh->argv, sup->env));
+	else if (!ft_strncmp(msh->argv[0], "export\0", 7))
+		g_status = (ft_export(msh->argv, sup));
+	else if (!ft_strncmp(msh->argv[0], "unset\0", 6))
+		g_status = (ft_unset(msh->argv, sup->env));
 	else if (!ft_strncmp(msh->argv[0], "cd\0", 3))
-		return (ft_cd(msh->argv, sup->env));
+		g_status = (ft_cd(msh->argv, sup->env));
 	else if (!ft_strncmp(msh->argv[0], "exit\0", 5))
-		return (ft_exit(msh->argv, sup->env));
+		g_status = (ft_exit(msh->argv, sup->env));
 	return (1);
 }
 
@@ -66,7 +69,6 @@ int	ft_if_builtin(t_msh *msh)
 	free(b_com);
 	return (0);
 }
-
 
 int	has_command(char *path, char *str)
 {
@@ -194,12 +196,12 @@ void	ft_free_msh(t_msh *msh)
 int	ft_exec(t_msh *msh, t_sup *sup)
 {
 	char	*com;
-	char *s;
+	char	*s;
 
-	com = ft_command(msh->argv[0], sup->env);
 	if (ft_if_builtin(msh))
 		return (ft_builtin(msh, sup));
-	else if (com)
+	com = ft_command(msh->argv[0], sup->env);
+	if (com)
 	{
 		pid = fork();
 		if (pid == 0)
@@ -218,7 +220,7 @@ int	ft_exec(t_msh *msh, t_sup *sup)
 	s = ft_strjoin(msh->argv[0], ": command not found");
 	ft_error(s, 127);
 	free(s);
-	return(1);
+	return (1);
 }
 
 // void	ft_handler(int sig)
@@ -232,21 +234,20 @@ int	ft_exec(t_msh *msh, t_sup *sup)
 // 	}
 // }
 
-int main(int argc, char **argv, char **env)
+int	main(int argc, char **argv, char **env)
 {
-	char *str;
-	t_msh *msh;
-	int tmpin;
-	int tmpout;
-	t_sup *sup;
-	t_msh *save_msh;
+	char	*str;
+	t_msh	*msh;
+	int		tmpin;
+	int		tmpout;
+	t_sup	*sup;
+	t_msh	*save_msh;
 
 	g_status = 0;
 	pid = 0;
-
 	sup = malloc(sizeof(t_sup));
 	env_cpy(env, sup);
-	while(1)
+	while (1)
 	{
 		// signal(SIGINT, ft_handler);
 		signal(SIGQUIT, SIG_IGN);
@@ -254,14 +255,14 @@ int main(int argc, char **argv, char **env)
 		tmpout = dup(1);
 		str = readline("minishell$ ");
 		if (str == NULL)
-			break; 
+			break ;
 		if (*str != '\0')
 			add_history(str);
 		msh = ft_mshnew();
 		save_msh = msh;
 		if (!ft_parser(msh, str, sup->env))
 		{
-			while(msh)
+			while (msh)
 			{
 				ft_pipe(msh, tmpin, tmpout);
 				ft_exec(msh, sup);

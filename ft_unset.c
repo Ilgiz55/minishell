@@ -1,9 +1,20 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_unset.c                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: laubrey <marvin@42.fr>                     +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/01/08 19:02:09 by laubrey           #+#    #+#             */
+/*   Updated: 2022/01/08 19:02:14 by laubrey          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
-int unset_checker(char *argv)
+int	unset_checker(char *argv)
 {
 	int	i;
-	int j;
 
 	g_status = 0;
 	i = 0;
@@ -15,7 +26,7 @@ int unset_checker(char *argv)
 	while (argv[i])
 	{
 		if (argv[i] != '_' && argv[i] != '=' && argv[i] != '+'
-		&& !ft_isalpha(argv[i]) && !ft_isdigit(argv[i]))
+			&& !ft_isalpha(argv[i]) && !ft_isdigit(argv[i]))
 			g_status = error_nva("unset", argv);
 		if (argv[i] == '+' && argv[i + 1] != '=')
 			g_status = error_nva("unset", argv);
@@ -24,9 +35,9 @@ int unset_checker(char *argv)
 	return (g_status);
 }
 
-int uns_rewrite(char **env, int n)
+void	uns_rewrite(char **env, int n)
 {
-	char *sup;
+	char	*sup;
 
 	while (env[n])
 	{
@@ -38,23 +49,19 @@ int uns_rewrite(char **env, int n)
 			n++;
 		}
 		else
-		{
 			env[n] = NULL;
-			return (0);
-		}
 	}
-	return (0);
 }
 
-int ft_unset(char **argv, char **env)
+int	ft_unset(char **argv, char **env)
 {
 	int	i;
-	int j;
+	int	j;
 
 	i = 0;
-	if (!argv[1])//Возвращает 0 без аргументов
+	if (!argv[1])
 		return (0);
-	while(argv[++i])
+	while (argv[++i])
 	{
 		if (!unset_checker(argv[i]))
 		{
@@ -67,17 +74,3 @@ int ft_unset(char **argv, char **env)
 	}
 	return (g_status);
 }
-
-//while (str[i])
-//{
-//	if (str[i] != '_' && str[i] != '=' && str[i] != '+'
-//	&& !ft_isalpha(str[i]) && !ft_isdigit(str[i]))
-//		return (1);
-//	if (str[i] == '+' && str[i + 1] != '=')
-//		return (1);
-//	if (str[i] == '=' && !fl)
-//		return (1);
-//	else if ((str[i] == '=' || str[i] == '+') && fl)
-//		break ;
-//	i++;
-//}

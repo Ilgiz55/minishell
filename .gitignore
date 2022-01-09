@@ -9,3 +9,6 @@ test.c
 /sasha_files/
 to_do.txt
 .*
+cmake-build-debug
+CMakeLists.txt
+
