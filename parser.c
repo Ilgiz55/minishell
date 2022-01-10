@@ -6,54 +6,11 @@
 /*   By: rchau <rchau@student.21-school.ru>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/02 20:50:40 by rchau             #+#    #+#             */
-/*   Updated: 2022/01/07 13:16:21 by rchau            ###   ########.fr       */
+/*   Updated: 2022/01/10 15:30:09 by rchau            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-int	ft_argc(char *str, int i)
-{
-	int	n;
-
-	n = 0;
-	while (str[i] && str[i] != '|')
-	{
-		while (str[i] == ' ')
-			i++;
-		while (str[i] && (str[i] != ' '))
-		{
-			if (str[i] == '\"')
-				while (str[++i] != '\"')
-					;
-			if (str[i] == '\'')
-				while (str[++i] != '\'')
-					;
-			i++;
-		}
-		n++;
-	}
-	return (n);
-}
-
-int	ft_arg_len(char *str, int i)
-{
-	int	j;
-
-	j = i;
-	while (str[i] && (str[i] != ' ' && str[i] != '|' && \
-		str[i] != '>' && str[i] != '<'))
-	{
-		if (str[i] == '\"')
-			while (str[++i] != '\"')
-				;
-		if (str[i] == '\'')
-			while (str[++i] != '\'')
-				;
-		i++;
-	}
-	return (i - j);
-}
 
 int	ft_new_command(t_msh **msh_p, char *str, int *k)
 {
@@ -82,7 +39,7 @@ int	ft_check_start(char *str, int *j)
 {
 	int	i;
 
-	if (!str)
+	if (*str == '\0')
 		return (1);
 	i = 0;
 	*j = i;
@@ -98,15 +55,26 @@ int	ft_check_start(char *str, int *j)
 	return (0);
 }
 
+int	ft_start_parser(t_msh *msh, char *str)
+{
+	int	i;
+
+	i = 0;
+	if (ft_check_start(str, &i))
+		return (1);
+	msh->argv = (char **)malloc(sizeof(char *) * (ft_argc(str, i) + 1));
+	if (!msh->argv)
+		return (1);
+	msh->argv[msh->argc] = NULL;
+	return (0);
+}
+
 int	ft_parser(t_msh *msh, char *str, char **env)
 {
 	int		i;
 	int		n;
 
-	if (ft_check_start(str, &i))
-		return (1);
-	msh->argv = (char **)malloc(sizeof(char *) * (ft_argc(str, i) + 1));
-	msh->argv[msh->argc] = NULL;
+	i = ft_start_parser(msh, str);
 	while (str[i])
 	{
 		n = ft_arg_len(str, i);
@@ -123,5 +91,7 @@ int	ft_parser(t_msh *msh, char *str, char **env)
 		if (ft_new_command(&msh, str, &i))
 			return (ft_error("syntax error", 258));
 	}
+	if (msh->argv[0] == '\0')
+		return (1);
 	return (0);
 }

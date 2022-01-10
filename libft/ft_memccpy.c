@@ -1,34 +1,31 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_echo.c                                          :+:      :+:    :+:   */
+/*   ft_memccpy.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: rchau <rchau@student.21-school.ru>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/01/08 19:01:15 by laubrey           #+#    #+#             */
-/*   Updated: 2022/01/10 15:22:41 by rchau            ###   ########.fr       */
+/*   Created: 2022/01/10 15:32:09 by rchau             #+#    #+#             */
+/*   Updated: 2022/01/10 15:32:10 by rchau            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "libft.h"
 
-int	ft_echo(char **argv)
+void	*ft_memccpy(void *dest, const void *src, int c, size_t n)
 {
-	int	i;
-	int	j;
+	unsigned char	ch;
+	unsigned char	*d;
+	unsigned char	*s;
 
-	i = 0;
-	if (argv[1] && !ft_strncmp(argv[1], "-n\0", 3))
-		i++;
-	while (argv[++i])
+	ch = (unsigned char)c;
+	d = (unsigned char *)dest;
+	s = (unsigned char *)src;
+	while (n--)
 	{
-		j = -1;
-		while (argv[i][++j])
-			write(1, &argv[i][j], 1);
-		if (argv[i + 1])
-			write(1, " ", 1);
+		*d++ = *s++;
+		if (*(d - 1) == ch)
+			return (d);
 	}
-	if (!argv[1] || ft_strncmp(argv[1], "-n\0", 3))
-		write(1, "\n", 1);
-	return (0);
+	return (NULL);
 }

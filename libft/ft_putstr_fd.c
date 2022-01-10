@@ -1,34 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_echo.c                                          :+:      :+:    :+:   */
+/*   ft_putstr_fd.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: rchau <rchau@student.21-school.ru>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/01/08 19:01:15 by laubrey           #+#    #+#             */
-/*   Updated: 2022/01/10 15:22:41 by rchau            ###   ########.fr       */
+/*   Created: 2022/01/10 15:32:35 by rchau             #+#    #+#             */
+/*   Updated: 2022/01/10 15:32:36 by rchau            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "libft.h"
 
-int	ft_echo(char **argv)
+void	ft_putstr_fd(char *s, int fd)
 {
-	int	i;
-	int	j;
+	size_t	i;
 
 	i = 0;
-	if (argv[1] && !ft_strncmp(argv[1], "-n\0", 3))
-		i++;
-	while (argv[++i])
+	if (!s)
+		return ;
+	while (s[i])
 	{
-		j = -1;
-		while (argv[i][++j])
-			write(1, &argv[i][j], 1);
-		if (argv[i + 1])
-			write(1, " ", 1);
+		write(fd, &s[i], 1);
+		i++;
 	}
-	if (!argv[1] || ft_strncmp(argv[1], "-n\0", 3))
-		write(1, "\n", 1);
-	return (0);
 }

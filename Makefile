@@ -8,16 +8,17 @@ HEADER	=	minishell.h
 SRC		= 	dollar.c		errors.c		ft_cd.c		\
 			ft_echo.c		ft_env.c		ft_exit.c	\
 			ft_export.c		ft_pwd.c		ft_unset.c	\
-			main.c			main_parser.c	parser.c	\
+			main.c			utils.c			parser.c	\
 			parser_utils.c	quotes.c		redirect.c	\
-			support_fun.c
+			support_fun.c	builtin.c		exec.c		\
+			parser_utils_2.c	
 #SRC_B	=	./
 
 OBJS	=	$(SRC:.c=.o)
 #OBJS_B	=	$(SRC_B:.c=.o)
 
-RLIB	=	-L/Users/rchau/.brew/Cellar/readline/8.1.1/lib/
-RINCL	=	-I/Users/rchau/.brew/Cellar/readline/8.1.1/include
+RLIB	=	-L/Users/laubrey/homebrew/Cellar/readline/8.1.1/lib/
+RINCL	=	-I/Users/laubrey/homebrew/Cellar/readline/8.1.1/include
 RLINE	=	-lreadline
 GCC		=	gcc
 RM		=	rm -f

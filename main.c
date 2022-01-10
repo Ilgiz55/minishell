@@ -1,9 +1,24 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   main.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: rchau <rchau@student.21-school.ru>         +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/01/10 14:14:36 by rchau             #+#    #+#             */
+/*   Updated: 2022/01/10 15:28:23 by rchau            ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
-void	env_cpy(char **from, t_sup *sup)
+void	env_cpy(char **from, t_sup *sup, int argc, char **argv)
 {
 	int	i;
 
+	(void)argc;
+	(void)argv;
+	g_status = 0;
 	i = 0;
 	while (from[i])
 		i++;
@@ -21,126 +36,6 @@ void	env_cpy(char **from, t_sup *sup)
 	i = env_search_same("SHLVL", sup->env);
 	if (i >= 0)
 		sup->env[i][6] = sup->env[i][6] + 1;
-}
-
-int	ft_builtin(t_msh *msh, t_sup *sup)
-{
-	if (!ft_strncmp(msh->argv[0], "echo\0", 5))
-		g_status = (ft_echo(msh->argv));
-	else if (!ft_strncmp(msh->argv[0], "pwd\0", 4))
-		g_status = (ft_pwd());
-	else if (!ft_strncmp(msh->argv[0], "env\0", 4))
-		g_status = (ft_env(msh->argv, sup->env));
-	else if (!ft_strncmp(msh->argv[0], "export\0", 7))
-		g_status = (ft_export(msh->argv, sup));
-	else if (!ft_strncmp(msh->argv[0], "unset\0", 6))
-		g_status = (ft_unset(msh->argv, sup->env));
-	else if (!ft_strncmp(msh->argv[0], "cd\0", 3))
-		g_status = (ft_cd(msh->argv, sup->env));
-	else if (!ft_strncmp(msh->argv[0], "exit\0", 5))
-		g_status = (ft_exit(msh->argv, sup->env));
-	return (1);
-}
-
-int	ft_if_builtin(t_msh *msh)
-{
-	int		i;
-	char	**b_com;
-
-	b_com = (char **)malloc(sizeof(char *) * 7);
-	b_com[0] = "echo";
-	b_com[1] = "cd";
-	b_com[2] = "pwd";
-	b_com[3] = "export";
-	b_com[4] = "unset";
-	b_com[5] = "env";
-	b_com[6] = "exit";
-	i = 0;
-	while (i < 7)
-	{
-		if (!ft_strncmp(msh->argv[0], b_com[i], \
-			ft_strlen(msh->argv[0]) | ft_strlen(b_com[i])))
-		{
-			free(b_com);
-			return (1);
-		}
-		i++;
-	}
-	free(b_com);
-	return (0);
-}
-
-int	has_command(char *path, char *str)
-{
-	DIR				*dirp;
-	struct dirent	*rdir;
-
-	dirp = opendir(path);
-	rdir = readdir(dirp);
-	while (rdir)
-	{
-		if (!ft_strncmp(rdir->d_name, str, \
-			ft_strlen(rdir->d_name) | ft_strlen(str)))
-		{
-			closedir(dirp);
-			return (1);
-		}
-		rdir = readdir(dirp);
-	}
-	closedir(dirp);
-	return (0);
-}
-
-void	ft_free_path(char **path_list)
-{
-	int	i;
-
-	i = -1;
-	while (path_list[++i])
-		free(path_list[i]);
-	free(path_list);
-}
-
-char *ft_command_dir(char *str, char **env)
-{
-	char	**path_list;
-	char	*path_line;
-	char	*path;
-	int		i;
-
-	path_line = ft_get_env(env, "PATH");
-	path_list = ft_split(path_line, ':');
-	free(path_line);
-	i = -1;
-	while (path_list[++i])
-	{
-		if (has_command(path_list[i], str))
-		{
-			path = ft_strdup(path_list[i]);
-			ft_free_path(path_list);
-			return (path);
-		}
-	}
-	ft_free_path(path_list);
-	return (NULL);
-}
-
-char	*ft_command(char *str, char **env)
-{
-	char	*dir;
-	char	*com;
-	char	*tmp;
-
-	if ((str[0] == '.' && str[1] == '/') || str[0] == '/')
-		return (ft_strdup(str));
-	dir = ft_command_dir(str, env);
-	if (!dir)
-		return (NULL);
-	tmp = ft_strjoin(dir, "/");
-	free (dir);
-	com = ft_strjoin(tmp, str);
-	free(tmp);
-	return (com);
 }
 
 void	ft_pipe(t_msh *msh, int tmpin, int tmpout)
@@ -168,11 +63,16 @@ void	ft_pipe(t_msh *msh, int tmpin, int tmpout)
 	close(msh->fdout);
 }
 
-void	ft_free_msh(t_msh *msh)
+void	ft_free_msh(t_msh *msh, char *str, int *tmp)
 {
 	t_msh	*tmp_msh;
 	int		i;
 
+	free(str);
+	dup2(tmp[0], 0);
+	dup2(tmp[1], 1);
+	close(tmp[0]);
+	close(tmp[1]);
 	while (msh)
 	{
 		if (msh->argv)
@@ -192,89 +92,32 @@ void	ft_free_msh(t_msh *msh)
 	}
 }
 
-int	ft_exec(t_msh *msh, t_sup *sup)
-{
-	char	*com;
-	char	*s;
-
-	if (ft_if_builtin(msh))
-		return (ft_builtin(msh, sup));
-	com = ft_command(msh->argv[0], sup->env);
-	if (com)
-	{
-		pid = fork();
-		if (pid == 0)
-		{
-			execve(com, msh->argv, sup->env);
-			perror("execve");
-			exit(1);
-		}
-		waitpid(pid, &g_status, 0);
-		pid = 0;
-		free(com);
-		if (!WEXITSTATUS(g_status))
-			return (1);
-		return (0);
-	}
-	s = ft_strjoin(msh->argv[0], ": command not found");
-	ft_error(s, 127);
-	free(s);
-	return (1);
-}
-
-// void	ft_handler(int sig)
-// {
-// 	if (sig == SIGINT && !pid)
-// 	{
-// 		write(1, "\n", 1);
-// 		rl_on_new_line();
-// 		rl_replace_line("", 0);
-// 		rl_redisplay();
-// 	}
-// }
-
 int	main(int argc, char **argv, char **env)
 {
 	char	*str;
 	t_msh	*msh;
-	int		tmpin;
-	int		tmpout;
+	int		*tmpin_out;
 	t_sup	*sup;
-	t_msh	*save_msh;
 
-	(void)argc;
-	(void)argv;
-	g_status = 0;
-	pid = 0;
-	sup = malloc(sizeof(t_sup));
-	env_cpy(env, sup);
+	sup = (t_sup *)malloc(sizeof(t_sup));
+	env_cpy(env, sup, argc, argv);
 	while (1)
 	{
-		// signal(SIGINT, ft_handler);
-		signal(SIGQUIT, SIG_IGN);
-		tmpin = dup(0);
-		tmpout = dup(1);
+		tmpin_out = ft_signal_and_tmp_in_out();
 		str = readline("minishell$ ");
-		if (str == NULL)
+		if (ft_check_str(str))
 			break ;
-		if (*str != '\0')
-			add_history(str);
 		msh = ft_mshnew();
-		save_msh = msh;
-		if (!ft_parser(msh, str, sup->env))
+		if (msh && !ft_parser(msh, str, sup->env))
 		{
 			while (msh)
 			{
-				ft_pipe(msh, tmpin, tmpout);
+				ft_pipe(msh, tmpin_out[0], tmpin_out[1]);
 				ft_exec(msh, sup);
 				msh = msh->next;
 			}
 		}
-		dup2(tmpin, 0);
-		dup2(tmpout, 1);
-		close(tmpin);
-		close(tmpout);
-		free(str);
-		ft_free_msh(save_msh);
+		ft_free_msh(msh, str, tmpin_out);
 	}
+	return (0);
 }
