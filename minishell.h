@@ -6,7 +6,7 @@
 /*   By: rchau <rchau@student.21-school.ru>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/02 21:05:48 by rchau             #+#    #+#             */
-/*   Updated: 2022/01/10 19:56:37 by rchau            ###   ########.fr       */
+/*   Updated: 2022/01/10 21:36:14 by rchau            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,9 @@ typedef struct s_status
 	int	child;
 }	t_status;
 
+
 t_status g_status;
+
 
 typedef struct s_msh
 {

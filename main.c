@@ -6,7 +6,7 @@
 /*   By: rchau <rchau@student.21-school.ru>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/10 14:14:36 by rchau             #+#    #+#             */
-/*   Updated: 2022/01/10 19:56:28 by rchau            ###   ########.fr       */
+/*   Updated: 2022/01/10 21:36:28 by rchau            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -120,16 +120,13 @@ int	main(int argc, char **argv, char **env)
 			break ;
 		msh = ft_mshnew();
 		save_msh = msh;
-		if (*str != '\0')
+		if (*str != '\0' && msh && !ft_parser(msh, str, sup->env))
 		{
-			if (*str != '\0' && msh && !ft_parser(msh, str, sup->env))
+			while (msh)
 			{
-				while (msh)
-				{
-					ft_pipe(msh, tmpin_out[0], tmpin_out[1]);
-					ft_exec(msh, sup);
-					msh = msh->next;
-				}
+				ft_pipe(msh, tmpin_out[0], tmpin_out[1]);
+				ft_exec(msh, sup);
+				msh = msh->next;
 			}
 		}
 		ft_free_msh(save_msh, str, tmpin_out);
