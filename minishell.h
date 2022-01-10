@@ -6,7 +6,7 @@
 /*   By: rchau <rchau@student.21-school.ru>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/02 21:05:48 by rchau             #+#    #+#             */
-/*   Updated: 2022/01/10 22:08:01 by rchau            ###   ########.fr       */
+/*   Updated: 2022/01/10 22:40:22 by rchau            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,8 +52,6 @@ typedef struct s_sup
 	char	**env;
 }	t_sup;
 
-void	rl_replace_line(void);
-
 int		ft_builtin(t_msh *msh, t_sup *sup);
 int		ft_if_builtin(t_msh *msh);
 
@@ -96,6 +94,10 @@ void	ft_free_path(char **path_list);
 void	ft_handler(int sig_num);
 int		ft_check_str(char *str);
 int		*ft_signal_and_tmp_in_out(void);
+t_msh	*ft_execute_command(t_msh *msh, t_sup *sup, int *tmpin_out);
+void	env_cpy(char **from, t_sup *sup, int argc, char **argv);
+void	ft_pipe(t_msh *msh, int tmpin, int tmpout);
+void	ft_free_msh(t_msh *msh, char *str, int *tmp);
 
 int		ft_cd(char **arg, char **env);
 int		ft_echo(char **arg);
@@ -125,5 +127,3 @@ void	cd_oldpwd(char **env);
 void	cd_home(char **env);
 
 #endif
-
-// -lreadline  -L/Users/rchau/.brew/Cellar/readline/8.1.1/lib/ -I/Users/rchau/.brew/Cellar/readline/8.1.1/include

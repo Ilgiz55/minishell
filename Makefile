@@ -36,7 +36,7 @@ all		:	$(NAME)
 
 $(NAME):	$(OBJS) $(HEADER)
 		$(MAKE) -C ./libft
-		$(GCC) $(CFLAGS) $(OBJS) ./libft/libft.a -o $(NAME) $(RLINE) $(RLIB) $(RINCL)
+		$(GCC) $(CFLAGS) $(OBJS)  $(RLINE) $(RLIB) $(RINCL) ./libft/libft.a -o $(NAME)
 
 #bonus	:	$(OBJS_B) $(HEADER_B)
 #		$(MAKE) -C ./libft
