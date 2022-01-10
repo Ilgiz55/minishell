@@ -18,8 +18,8 @@ void	ft_handler(int sig_num)
 	{
 		write(1, "\n", 1);
 		rl_replace_line("", 1);
-		rl_on_new_line();
 
+		rl_on_new_line();
 		rl_redisplay();
 	}
 	if (sig_num == SIGINT && g_status.child)
