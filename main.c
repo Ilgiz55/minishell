@@ -6,7 +6,7 @@
 /*   By: rchau <rchau@student.21-school.ru>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/10 14:14:36 by rchau             #+#    #+#             */
-/*   Updated: 2022/01/10 15:28:23 by rchau            ###   ########.fr       */
+/*   Updated: 2022/01/10 17:21:00 by rchau            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,6 +66,7 @@ void	ft_pipe(t_msh *msh, int tmpin, int tmpout)
 void	ft_free_msh(t_msh *msh, char *str, int *tmp)
 {
 	t_msh	*tmp_msh;
+	t_msh 	*tmp2;
 	int		i;
 
 	free(str);
@@ -73,22 +74,29 @@ void	ft_free_msh(t_msh *msh, char *str, int *tmp)
 	dup2(tmp[1], 1);
 	close(tmp[0]);
 	close(tmp[1]);
+	free(tmp);
 	while (msh)
 	{
 		if (msh->argv)
 		{
-			i = -1;
-			while (msh->argv[++i])
-				free(msh->argv[i]);
+			i = 0;
+			while (msh->argv[i])
+				free(msh->argv[i++]);
 			free(msh->argv);
 		}
 		if (msh->outfile)
 			free(msh->outfile);
 		if (msh->infile)
 			free(msh->infile);
-		tmp_msh = msh;
-		msh = msh->next;
-		free(tmp_msh);
+		// tmp_msh = msh;
+		// while (msh->next)
+		// 	msh = msh->next;
+		// tmp2 = msh;
+		// msh = msh->prev;
+		// if (msh)
+		// 	msh->next = NULL;
+		// tmp2->prev = NULL;
+		// free(tmp2);
 	}
 }
 
@@ -98,6 +106,7 @@ int	main(int argc, char **argv, char **env)
 	t_msh	*msh;
 	int		*tmpin_out;
 	t_sup	*sup;
+	t_msh	*save_msh;
 
 	sup = (t_sup *)malloc(sizeof(t_sup));
 	env_cpy(env, sup, argc, argv);
@@ -108,7 +117,8 @@ int	main(int argc, char **argv, char **env)
 		if (ft_check_str(str))
 			break ;
 		msh = ft_mshnew();
-		if (msh && !ft_parser(msh, str, sup->env))
+		save_msh = msh;
+		if (*str != '\0' && msh && !ft_parser(msh, str, sup->env))
 		{
 			while (msh)
 			{
@@ -117,7 +127,7 @@ int	main(int argc, char **argv, char **env)
 				msh = msh->next;
 			}
 		}
-		ft_free_msh(msh, str, tmpin_out);
+		ft_free_msh(save_msh, str, tmpin_out);
 	}
 	return (0);
 }
