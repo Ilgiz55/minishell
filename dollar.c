@@ -6,7 +6,7 @@
 /*   By: rchau <rchau@student.21-school.ru>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/02 21:05:40 by rchau             #+#    #+#             */
-/*   Updated: 2022/01/07 13:14:42 by rchau            ###   ########.fr       */
+/*   Updated: 2022/01/10 15:42:57 by rchau            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ char	*ft_get_env(char **env, char *key)
 				ft_strlen(answer)) == 0)
 			{
 				free(answer);
-				return (ft_substr(env[i], j + 1, ft_strlen(env[i]) - j));
+				return (ft_substr(env[i], j + 1, ft_strlen(env[i]) - j - 1));
 			}
 			free(answer);
 		}
@@ -81,8 +81,9 @@ void	ft_dollar(char **s, int *j, char **env)
 	tmp[2] = ft_substr(str, 0, *j - 1);
 	tmp[3] = ft_strdup(str + i);
 	tmp[4] = ft_strjoin(tmp[2], tmp[1]);
+	str = ft_strjoin(tmp[4], tmp[3]);
 	free(*s);
-	*s = ft_strjoin(tmp[4], tmp[3]);
-	*j = i - 1;
 	ft_free_tmp(tmp, 5);
+	*j = i - 1;
+	*s = str;
 }

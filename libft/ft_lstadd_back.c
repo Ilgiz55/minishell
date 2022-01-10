@@ -1,34 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_echo.c                                          :+:      :+:    :+:   */
+/*   ft_lstadd_back.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: rchau <rchau@student.21-school.ru>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/01/08 19:01:15 by laubrey           #+#    #+#             */
-/*   Updated: 2022/01/10 15:22:41 by rchau            ###   ########.fr       */
+/*   Created: 2022/01/10 15:31:43 by rchau             #+#    #+#             */
+/*   Updated: 2022/01/10 15:31:44 by rchau            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "libft.h"
 
-int	ft_echo(char **argv)
+void	ft_lstadd_back(t_list **lst, t_list *new)
 {
-	int	i;
-	int	j;
+	t_list	*last;
 
-	i = 0;
-	if (argv[1] && !ft_strncmp(argv[1], "-n\0", 3))
-		i++;
-	while (argv[++i])
+	if (lst)
 	{
-		j = -1;
-		while (argv[i][++j])
-			write(1, &argv[i][j], 1);
-		if (argv[i + 1])
-			write(1, " ", 1);
+		if (*lst)
+		{
+			last = ft_lstlast(*lst);
+			last->next = new;
+		}
+		else
+			*lst = new;
 	}
-	if (!argv[1] || ft_strncmp(argv[1], "-n\0", 3))
-		write(1, "\n", 1);
-	return (0);
 }

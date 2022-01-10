@@ -1,5 +1,4 @@
 .DS_Store
-/libft/
 *.o
 *.a
 a.out
