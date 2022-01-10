@@ -16,7 +16,7 @@ int	ft_pwd(void)
 {
 	char	*path;
 
-	path = malloc(sizeof(1024, 1));
+	path = malloc(sizeof(char) * 1024);
 	if (getcwd(path, 1024))
 	{
 		write(1, path, ft_strlen(path));
