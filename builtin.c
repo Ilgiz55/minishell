@@ -6,7 +6,7 @@
 /*   By: rchau <rchau@student.21-school.ru>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/10 13:54:50 by rchau             #+#    #+#             */
-/*   Updated: 2022/01/10 14:04:32 by rchau            ###   ########.fr       */
+/*   Updated: 2022/01/10 19:32:33 by rchau            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,19 +15,19 @@
 int	ft_builtin(t_msh *msh, t_sup *sup)
 {
 	if (!ft_strncmp(msh->argv[0], "echo\0", 5))
-		g_status = (ft_echo(msh->argv));
+		g_status.exit = (ft_echo(msh->argv));
 	else if (!ft_strncmp(msh->argv[0], "pwd\0", 4))
-		g_status = (ft_pwd());
+		g_status.exit = (ft_pwd());
 	else if (!ft_strncmp(msh->argv[0], "env\0", 4))
-		g_status = (ft_env(msh->argv, sup->env));
+		g_status.exit = (ft_env(msh->argv, sup->env));
 	else if (!ft_strncmp(msh->argv[0], "export\0", 7))
-		g_status = (ft_export(msh->argv, sup));
+		g_status.exit = (ft_export(msh->argv, sup));
 	else if (!ft_strncmp(msh->argv[0], "unset\0", 6))
-		g_status = (ft_unset(msh->argv, sup->env));
+		g_status.exit = (ft_unset(msh->argv, sup->env));
 	else if (!ft_strncmp(msh->argv[0], "cd\0", 3))
-		g_status = (ft_cd(msh->argv, sup->env));
+		g_status.exit = (ft_cd(msh->argv, sup->env));
 	else if (!ft_strncmp(msh->argv[0], "exit\0", 5))
-		g_status = (ft_exit(msh->argv, sup->env));
+		g_status.exit = (ft_exit(msh->argv, sup->env));
 	return (1);
 }
 

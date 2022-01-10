@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_unset.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: laubrey <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: rchau <rchau@student.21-school.ru>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/08 19:02:09 by laubrey           #+#    #+#             */
-/*   Updated: 2022/01/08 19:02:14 by laubrey          ###   ########.fr       */
+/*   Updated: 2022/01/10 19:31:27 by rchau            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,23 +16,23 @@ int	unset_checker(char *argv)
 {
 	int	i;
 
-	g_status = 0;
+	g_status.exit = 0;
 	i = 0;
 	if (argv[0] != '_' && !ft_isalpha(argv[0]))
 	{
-		g_status = error_nva("unset", argv);
-		return (g_status);
+		g_status.exit = error_nva("unset", argv);
+		return (g_status.exit);
 	}
 	while (argv[i])
 	{
 		if (argv[i] != '_' && argv[i] != '=' && argv[i] != '+'
 			&& !ft_isalpha(argv[i]) && !ft_isdigit(argv[i]))
-			g_status = error_nva("unset", argv);
+			g_status.exit = error_nva("unset", argv);
 		if (argv[i] == '+' && argv[i + 1] != '=')
-			g_status = error_nva("unset", argv);
+			g_status.exit = error_nva("unset", argv);
 		i++;
 	}
-	return (g_status);
+	return (g_status.exit);
 }
 
 void	uns_rewrite(char **env, int n)
@@ -59,18 +59,18 @@ int	ft_unset(char **argv, char **env)
 	int	j;
 
 	i = 0;
-	if (!argv[1])
+	if (!argv[1] || *(argv[i]) != '\0')
 		return (0);
-	while (argv[++i])
+	while (argv[++i] && *(argv[i]) != '\0')
 	{
 		if (!unset_checker(argv[i]))
 		{
 			j = env_search_same(argv[i], env);
 			if (j >= 0)
 				uns_rewrite(env, j);
-			g_status = 0;
+			g_status.exit = 0;
 		}
 		i++;
 	}
-	return (g_status);
+	return (g_status.exit);
 }

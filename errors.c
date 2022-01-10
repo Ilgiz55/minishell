@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   errors.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: laubrey <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: rchau <rchau@student.21-school.ru>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/08 19:03:04 by laubrey           #+#    #+#             */
-/*   Updated: 2022/01/08 19:03:06 by laubrey          ###   ########.fr       */
+/*   Updated: 2022/01/10 19:29:53 by rchau            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ int	error_nsfod(char *comm, char *arg)
 	write(1, ": ", 2);
 	write(1, arg, ft_strlen(arg));
 	write(1, ": No such file or directory\n", 28);
-	g_status = 1;
+	g_status.exit = 1;
 	return (1);
 }
 

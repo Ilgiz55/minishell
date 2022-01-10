@@ -6,7 +6,7 @@
 /*   By: rchau <rchau@student.21-school.ru>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/02 20:50:40 by rchau             #+#    #+#             */
-/*   Updated: 2022/01/10 16:56:54 by rchau            ###   ########.fr       */
+/*   Updated: 2022/01/10 18:40:05 by rchau            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,9 +39,9 @@ int	ft_check_start(char *str, int *j)
 {
 	int	i;
 
-	if (*str == '\0')
-		return (1);
 	i = 0;
+	if (str[i] == '\0')
+		return (1);
 	*j = i;
 	i = ft_skip_space(str, i);
 	if (str[i] == '\0')
