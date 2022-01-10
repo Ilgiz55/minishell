@@ -25,20 +25,20 @@ void	env_cpy(char **from, t_sup *sup)
 
 int	ft_builtin(t_msh *msh, t_sup *sup)
 {
-	if (!ft_strncmp(msh->argv[0], "echo\0", 5)) // Проверить что показывает после unset PATH должно bash:______:Command not found
-		return (ft_echo(msh->argv, sup->env));
-	else if (!ft_strncmp(msh->argv[0], "pwd\0", 4)) //Проверить выдает ли после unset PATH
-		return (ft_pwd());
-	else if (!ft_strncmp(msh->argv[0], "env\0", 4)) //Проверить выдает ли только те, что с =
-		return (ft_env(msh->argv, sup->env));
-	else if (!ft_strncmp(msh->argv[0], "export\0", 7)) //Множественный export сегается. Проблема в ft_command_dir dirp pass. Перепроверить на другой учетке
-		return (ft_export(msh->argv, sup));
-	else if (!ft_strncmp(msh->argv[0], "unset\0", 6)) //Проверить еще с export
-		return (ft_unset(msh->argv, sup->env));
+	if (!ft_strncmp(msh->argv[0], "echo\0", 5))
+		g_status = (ft_echo(msh->argv));
+	else if (!ft_strncmp(msh->argv[0], "pwd\0", 4))
+		g_status = (ft_pwd());
+	else if (!ft_strncmp(msh->argv[0], "env\0", 4))
+		g_status = (ft_env(msh->argv, sup->env));
+	else if (!ft_strncmp(msh->argv[0], "export\0", 7))
+		g_status = (ft_export(msh->argv, sup));
+	else if (!ft_strncmp(msh->argv[0], "unset\0", 6))
+		g_status = (ft_unset(msh->argv, sup->env));
 	else if (!ft_strncmp(msh->argv[0], "cd\0", 3))
-		return (ft_cd(msh->argv, sup->env));
+		g_status = (ft_cd(msh->argv, sup->env));
 	else if (!ft_strncmp(msh->argv[0], "exit\0", 5))
-		return (ft_exit(msh->argv, sup->env));
+		g_status = (ft_exit(msh->argv, sup->env));
 	return (1);
 }
 
@@ -130,7 +130,6 @@ char	*ft_command(char *str, char **env)
 	char	*dir;
 	char	*com;
 	char	*tmp;
-	int		i;
 
 	if ((str[0] == '.' && str[1] == '/') || str[0] == '/')
 		return (ft_strdup(str));
@@ -207,7 +206,7 @@ void	ft_handler(int sig_num)
 int	ft_exec(t_msh *msh, t_sup *sup)
 {
 	char	*com;
-	char *s;
+	char	*s;
 
 	if (ft_if_builtin(msh))
 		return (ft_builtin(msh, sup));
@@ -231,11 +230,11 @@ int	ft_exec(t_msh *msh, t_sup *sup)
 	s = ft_strjoin(msh->argv[0], ": command not found");
 	ft_error(s, 127);
 	free(s);
-	return(1);
+	return (1);
 }
 
 
-int main(int argc, char **argv, char **env)
+int	main(int argc, char **argv, char **env)
 {
 	char	*str;
 	t_msh	*msh;
@@ -244,6 +243,8 @@ int main(int argc, char **argv, char **env)
 	t_sup	*sup;
 	t_msh	*save_msh;
 
+	(void)argc;
+	(void)argv;
 	g_status = 0;
 	// rl_catch_signals = 0;
 	
