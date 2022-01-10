@@ -6,7 +6,7 @@
 /*   By: rchau <rchau@student.21-school.ru>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/02 21:05:48 by rchau             #+#    #+#             */
-/*   Updated: 2022/01/09 20:01:39 by rchau            ###   ########.fr       */
+/*   Updated: 2022/01/10 15:23:42 by rchau            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,14 +24,11 @@
 # include <dirent.h>
 # include <signal.h>
 
-int g_status;
-int pid;
-
-extern int rl_catch_signals;
+int	g_status;
+// extern int rl_catch_signals;
 
 typedef struct s_msh
 {
-
 	int		argc;
 	char	**argv;
 	// char	op;   // '|'   NULL
@@ -56,33 +53,49 @@ t_msh bla;
 
 void rl_replace_line();
 
-int	ft_argc(char *str, int i);
-int	ft_arg_len(char *str, int i);
-int	ft_new_command(t_msh **msh_p, char *str, int *k);
-int	ft_check_start(char *str, int *j);
-int	ft_parser(t_msh *msh, char *str, char **env);
+int		ft_builtin(t_msh *msh, t_sup *sup);
+int		ft_if_builtin(t_msh *msh);
+
+
+int		ft_new_command(t_msh **msh_p, char *str, int *k);
+int		ft_check_start(char *str, int *j);
+int		ft_start_parser(t_msh *msh, char *str);
+int		ft_parser(t_msh *msh, char *str, char **env);
 
 void	ft_free_tmp(char **tmp, int n);
 t_msh	*ft_mshnew(void);
-int	ft_error(char *str, int i);
-int	ft_skip_space(char *str, int i);
+int		ft_error(char *str, int i);
+int		ft_skip_space(char *str, int i);
 char	*ft_get_stop_word(char *str, int *j);
+
+int		ft_argc(char *str, int i);
+int		ft_arg_len(char *str, int i);
 
 void	ft_double_quotes(char **s, int *j, char **env);
 void	ft_check_dollar_in_quotes(char **s, int *i, char **env);
 void	ft_quotes(char **s, int *k);
 char	*ft_open_quotes(char *str, char **env);
-int	ft_check_open_quotes(char *str);
+int		ft_check_open_quotes(char *str);
 
-int	ft_redirect(t_msh *msh, char *str, int *j);
-int	ft_redirect_input(char *str, int *j, t_msh *msh);
-int	ft_redirect_output(char *str, int *j, t_msh *msh);
-int	ft_stop_word(char *str, int *i, t_msh *msh);
+int		ft_redirect(t_msh *msh, char *str, int *j);
+int		ft_redirect_input(char *str, int *j, t_msh *msh);
+int		ft_redirect_output(char *str, int *j, t_msh *msh);
+int		ft_stop_word(char *str, int *i, t_msh *msh);
 char	*ft_get_file_name(char *str, int *i);
 
 char	*ft_get_env(char **env, char *key);
 void	ft_dollar(char **s, int *j, char **env);
 void	ft_exit_status(char **s, int *j);
+
+int		ft_exec(t_msh *msh, t_sup *sup);
+char	*ft_command_dir(char *str, char **env);
+int		has_command(char *path, char *str);
+char	*ft_command(char *str, char **env);
+void	ft_free_path(char **path_list);
+
+void	ft_handler(int sig_num);
+int		ft_check_str(char *str);
+int		*ft_signal_and_tmp_in_out(void);
 
 int		ft_cd(char **arg, char **env);
 int		ft_echo(char **arg);
@@ -111,35 +124,8 @@ void	cd_prevpwd(char **env);
 void	cd_oldpwd(char **env);
 void	cd_home(char **env);
 
-///***libft**/
-//
-// char	*ft_strjoin(char const *s1, char const *s2);
-// char	*ft_strdup(const char *s1);
-// char	*ft_substr(char const *s, unsigned int start, size_t	len);
-// int		ft_isalnum(int c);
-// size_t	ft_strlen(const char *s);
-// int		ft_strncmp(const char *s1, const char *s2, size_t	n);
-// char	*ft_itoa(int n);
-// char	*vnos(char *rev, int n, int i);
-// int		size(int num);
-// void	*ft_memmove(void *dst, const void *src, size_t	len);
-// char	**ft_split(char const *s, char c);
-// int		couword(char const *str, char cut);
-// void	line(char **stolb, int nw, const char *s, char cut);
-// void	makeclean(char **s, int i);
-// int		ft_memcmp(const void *s1, const void *s2, size_t	n);
-// void	*ft_memcpy(void *dst, const void *src, size_t	n);
-// char	*ft_strchr(const char *s, int c);
-// size_t	ft_strlcpy(char *dst, const char *src, size_t	dstsize);
-// int		ft_isalpha(int c);
-// char	*ft_strnstr(const char *haystack, const char *needle, size_t	len);
-// int		ft_isdigit(int c);
-// char	*ft_strrchr(const char *s, int c);
-// void	*ft_memset(void *b, int c, size_t	len);
-// void	*ft_calloc(size_t	count, size_t	size);
-// int		ft_atoi(const char *str);
 
 #endif
 
 
-// -lreadline  -L/Users/rchau/.brew/Cellar/readline/8.1.1/lib/ -I/Users/rchau/.brew/Cellar/readline/8.1.1/include
+// -lreadline  -L/Users/chrau/.brew/Cellar/readline/8.1.1/lib/ -I/Users/rchau/.brew/Cellar/readline/8.1.1/include

@@ -1,34 +1,41 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_echo.c                                          :+:      :+:    :+:   */
+/*   ft_strjoin.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: rchau <rchau@student.21-school.ru>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/01/08 19:01:15 by laubrey           #+#    #+#             */
-/*   Updated: 2022/01/10 15:22:41 by rchau            ###   ########.fr       */
+/*   Created: 2022/01/10 15:32:49 by rchau             #+#    #+#             */
+/*   Updated: 2022/01/10 15:32:50 by rchau            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "libft.h"
 
-int	ft_echo(char **argv)
+char	*ft_strjoin(char const *s1, char const *s2)
 {
-	int	i;
-	int	j;
+	char	*s;
+	size_t	i;
+	size_t	s1_len;
 
+	if (!s1 || !s2)
+		return (NULL);
+	s1_len = ft_strlen(s1);
+	s = malloc (sizeof(char) * (s1_len + ft_strlen(s2)) + 1);
+	if (!s)
+		return (NULL);
 	i = 0;
-	if (argv[1] && !ft_strncmp(argv[1], "-n\0", 3))
-		i++;
-	while (argv[++i])
+	while (s1[i])
 	{
-		j = -1;
-		while (argv[i][++j])
-			write(1, &argv[i][j], 1);
-		if (argv[i + 1])
-			write(1, " ", 1);
+		s[i] = s1[i];
+		i++;
 	}
-	if (!argv[1] || ft_strncmp(argv[1], "-n\0", 3))
-		write(1, "\n", 1);
-	return (0);
+	i = 0;
+	while (s2[i])
+	{
+		s[i + s1_len] = s2[i];
+		i++;
+	}
+	s[i + s1_len] = '\0';
+	return (s);
 }
