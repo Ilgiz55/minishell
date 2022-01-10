@@ -6,7 +6,7 @@
 /*   By: rchau <rchau@student.21-school.ru>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/02 21:05:48 by rchau             #+#    #+#             */
-/*   Updated: 2022/01/10 15:23:42 by rchau            ###   ########.fr       */
+/*   Updated: 2022/01/10 16:45:23 by rchau            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@ int		ft_if_builtin(t_msh *msh);
 
 int		ft_new_command(t_msh **msh_p, char *str, int *k);
 int		ft_check_start(char *str, int *j);
-int		ft_start_parser(t_msh *msh, char *str);
+int		ft_start_parser(t_msh *msh, char *str, int *i);
 int		ft_parser(t_msh *msh, char *str, char **env);
 
 void	ft_free_tmp(char **tmp, int n);
@@ -128,4 +128,4 @@ void	cd_home(char **env);
 #endif
 
 
-// -lreadline  -L/Users/chrau/.brew/Cellar/readline/8.1.1/lib/ -I/Users/rchau/.brew/Cellar/readline/8.1.1/include
+// -lreadline  -L/Users/rchau/.brew/Cellar/readline/8.1.1/lib/ -I/Users/rchau/.brew/Cellar/readline/8.1.1/include

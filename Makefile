@@ -20,7 +20,7 @@ OBJS	=	$(SRC:.c=.o)
 RLIB	=	-L/Users/rchau/.brew/Cellar/readline/8.1.1/lib/
 RINCL	=	-I/Users/rchau/.brew/Cellar/readline/8.1.1/include
 RLINE	=	-lreadline
-GCC		=	gcc
+GCC		=	gcc -g
 RM		=	rm -f
 CFLAGS	=	-Werror -Wextra -Wall
 

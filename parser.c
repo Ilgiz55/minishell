@@ -6,7 +6,7 @@
 /*   By: rchau <rchau@student.21-school.ru>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/02 20:50:40 by rchau             #+#    #+#             */
-/*   Updated: 2022/01/10 15:30:09 by rchau            ###   ########.fr       */
+/*   Updated: 2022/01/10 16:56:54 by rchau            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,14 +55,11 @@ int	ft_check_start(char *str, int *j)
 	return (0);
 }
 
-int	ft_start_parser(t_msh *msh, char *str)
+int	ft_start_parser(t_msh *msh, char *str, int *i)
 {
-	int	i;
-
-	i = 0;
-	if (ft_check_start(str, &i))
+	if (ft_check_start(str, i))
 		return (1);
-	msh->argv = (char **)malloc(sizeof(char *) * (ft_argc(str, i) + 1));
+	msh->argv = (char **)malloc(sizeof(char *) * (ft_argc(str, *i) + 1));
 	if (!msh->argv)
 		return (1);
 	msh->argv[msh->argc] = NULL;
@@ -74,7 +71,9 @@ int	ft_parser(t_msh *msh, char *str, char **env)
 	int		i;
 	int		n;
 
-	i = ft_start_parser(msh, str);
+	i = 0;
+	if (ft_start_parser(msh, str, &i))
+		return (1);
 	while (str[i])
 	{
 		n = ft_arg_len(str, i);
