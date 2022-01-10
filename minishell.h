@@ -82,7 +82,7 @@ void	ft_dollar(char **s, int *j, char **env);
 void	ft_exit_status(char **s, int *j);
 
 int		ft_cd(char **arg, char **env);
-int		ft_echo(char **arg, char **env);
+int		ft_echo(char **arg);
 void	status_writing();
 int		ft_exit(char **arg, char **env);
 int		error_nar(char *comm, char *arg);

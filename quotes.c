@@ -80,7 +80,6 @@ void	ft_quotes(char **s, int *k)
 char	*ft_open_quotes(char *str, char **env)
 {
 	int		i;
-	char	*tmp;
 
 	i = -1;
 	while (str[++i])
