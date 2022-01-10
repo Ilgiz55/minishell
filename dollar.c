@@ -31,7 +31,7 @@ char	*ft_get_env(char **env, char *key)
 				ft_strlen(answer)) == 0)
 			{
 				free(answer);
-				return (ft_substr(env[i], j + 1, ft_strlen(env[i]) - j));
+				return (ft_substr(env[i], j + 1, ft_strlen(env[i]) - j - 1));
 			}
 			free(answer);
 		}
