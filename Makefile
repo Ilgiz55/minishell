@@ -17,8 +17,12 @@ SRC		= 	dollar.c		errors.c		ft_cd.c		\
 OBJS	=	$(SRC:.c=.o)
 #OBJS_B	=	$(SRC_B:.c=.o)
 
-RLIB	=	-L/Users/laubrey/homebrew/Cellar/readline/8.1.1/lib/
-RINCL	=	-I/Users/laubrey/homebrew/Cellar/readline/8.1.1/include
+# RLIB	=	-L/Users/laubrey/homebrew/Cellar/readline/8.1.1/lib/
+# RINCL	=	-I/Users/laubrey/homebrew/Cellar/readline/8.1.1/include
+
+RLIB	=	-L/Users/rchau/.brew/Cellar/readline/8.1.1/lib/ 
+RINCL	=	-I/Users/rchau/.brew/Cellar/readline/8.1.1/include
+
 RLINE	=	-lreadline
 GCC		=	gcc -g
 RM		=	rm -f
@@ -32,7 +36,7 @@ all		:	$(NAME)
 
 $(NAME):	$(OBJS) $(HEADER)
 		$(MAKE) -C ./libft
-		$(GCC) $(CFLAGS) $(OBJS) ./libft/libft.a -o $(NAME) $(RLINE) $(RLIB) $(RINCL)
+		$(GCC) $(CFLAGS) $(OBJS)  $(RLINE) $(RLIB) $(RINCL) ./libft/libft.a -o $(NAME)
 
 #bonus	:	$(OBJS_B) $(HEADER_B)
 #		$(MAKE) -C ./libft
