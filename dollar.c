@@ -6,7 +6,7 @@
 /*   By: rchau <rchau@student.21-school.ru>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/02 21:05:40 by rchau             #+#    #+#             */
-/*   Updated: 2022/01/09 17:08:57 by rchau            ###   ########.fr       */
+/*   Updated: 2022/01/10 15:42:57 by rchau            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ char	*ft_get_env(char **env, char *key)
 				ft_strlen(answer)) == 0)
 			{
 				free(answer);
-				return (ft_substr(env[i], j + 1, ft_strlen(env[i]) - j));
+				return (ft_substr(env[i], j + 1, ft_strlen(env[i]) - j - 1));
 			}
 			free(answer);
 		}
