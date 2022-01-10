@@ -6,7 +6,7 @@
 /*   By: rchau <rchau@student.21-school.ru>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/10 14:14:36 by rchau             #+#    #+#             */
-/*   Updated: 2022/01/10 17:21:00 by rchau            ###   ########.fr       */
+/*   Updated: 2022/01/10 19:56:28 by rchau            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ void	env_cpy(char **from, t_sup *sup, int argc, char **argv)
 
 	(void)argc;
 	(void)argv;
-	g_status = 0;
+	g_status.exit = 0;
 	i = 0;
 	while (from[i])
 		i++;
@@ -29,8 +29,8 @@ void	env_cpy(char **from, t_sup *sup, int argc, char **argv)
 		sup->env[i] = ft_strdup(from[i]);
 		if (!sup->env[i])
 		{
-			g_status = error_malloc();
-			exit (g_status);
+			g_status.exit = error_malloc();
+			exit (g_status.exit);
 		}
 	}
 	i = env_search_same("SHLVL", sup->env);
@@ -65,8 +65,6 @@ void	ft_pipe(t_msh *msh, int tmpin, int tmpout)
 
 void	ft_free_msh(t_msh *msh, char *str, int *tmp)
 {
-	t_msh	*tmp_msh;
-	t_msh 	*tmp2;
 	int		i;
 
 	free(str);
@@ -88,15 +86,18 @@ void	ft_free_msh(t_msh *msh, char *str, int *tmp)
 			free(msh->outfile);
 		if (msh->infile)
 			free(msh->infile);
-		// tmp_msh = msh;
-		// while (msh->next)
-		// 	msh = msh->next;
-		// tmp2 = msh;
-		// msh = msh->prev;
-		// if (msh)
-		// 	msh->next = NULL;
-		// tmp2->prev = NULL;
-		// free(tmp2);
+
+		if (msh->next)
+		{
+			msh = msh->next;
+			free(msh->prev);
+			msh->prev = NULL;
+		}
+		else
+		{
+			free(msh);
+			msh = NULL;
+		}
 	}
 }
 
@@ -110,6 +111,7 @@ int	main(int argc, char **argv, char **env)
 
 	sup = (t_sup *)malloc(sizeof(t_sup));
 	env_cpy(env, sup, argc, argv);
+	g_status.child = 0;
 	while (1)
 	{
 		tmpin_out = ft_signal_and_tmp_in_out();
@@ -118,13 +120,16 @@ int	main(int argc, char **argv, char **env)
 			break ;
 		msh = ft_mshnew();
 		save_msh = msh;
-		if (*str != '\0' && msh && !ft_parser(msh, str, sup->env))
+		if (*str != '\0')
 		{
-			while (msh)
+			if (*str != '\0' && msh && !ft_parser(msh, str, sup->env))
 			{
-				ft_pipe(msh, tmpin_out[0], tmpin_out[1]);
-				ft_exec(msh, sup);
-				msh = msh->next;
+				while (msh)
+				{
+					ft_pipe(msh, tmpin_out[0], tmpin_out[1]);
+					ft_exec(msh, sup);
+					msh = msh->next;
+				}
 			}
 		}
 		ft_free_msh(save_msh, str, tmpin_out);
