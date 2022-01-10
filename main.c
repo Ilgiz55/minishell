@@ -6,7 +6,7 @@
 /*   By: rchau <rchau@student.21-school.ru>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/10 14:14:36 by rchau             #+#    #+#             */
-/*   Updated: 2022/01/10 21:36:28 by rchau            ###   ########.fr       */
+/*   Updated: 2022/01/10 21:51:12 by rchau            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,7 +86,6 @@ void	ft_free_msh(t_msh *msh, char *str, int *tmp)
 			free(msh->outfile);
 		if (msh->infile)
 			free(msh->infile);
-
 		if (msh->next)
 		{
 			msh = msh->next;
