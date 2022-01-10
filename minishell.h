@@ -6,7 +6,7 @@
 /*   By: rchau <rchau@student.21-school.ru>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/02 21:05:48 by rchau             #+#    #+#             */
-/*   Updated: 2022/01/10 16:45:23 by rchau            ###   ########.fr       */
+/*   Updated: 2022/01/10 19:56:37 by rchau            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,8 +24,16 @@
 # include <dirent.h>
 # include <signal.h>
 
-int	g_status;
+// int	g_status;
 // extern int rl_catch_signals;
+
+typedef struct s_status
+{
+	int	exit;
+	int	child;
+}	t_status;
+
+t_status g_status;
 
 typedef struct s_msh
 {

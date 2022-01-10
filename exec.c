@@ -6,7 +6,7 @@
 /*   By: rchau <rchau@student.21-school.ru>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/10 13:58:52 by rchau             #+#    #+#             */
-/*   Updated: 2022/01/10 14:05:33 by rchau            ###   ########.fr       */
+/*   Updated: 2022/01/10 19:48:09 by rchau            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,11 +25,15 @@ int	ft_exec(t_msh *msh, t_sup *sup)
 		msh->pid = fork();
 		if (msh->pid == 0)
 		{
+			g_status.child = 1;
+			signal(SIGINT, SIG_DFL);
+			signal(SIGQUIT, SIG_DFL);
 			execve(com, msh->argv, sup->env);
 			perror("execve");
 			exit(1);
 		}
-		waitpid(msh->pid, &g_status, 0);
+		g_status.child = 0;
+		waitpid(msh->pid, &g_status.exit, 0);
 		free(com);
 		return (0);
 	}

@@ -6,7 +6,7 @@
 /*   By: rchau <rchau@student.21-school.ru>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/02 21:05:31 by rchau             #+#    #+#             */
-/*   Updated: 2022/01/09 17:12:20 by rchau            ###   ########.fr       */
+/*   Updated: 2022/01/10 19:17:32 by rchau            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,8 +23,11 @@ t_msh	*ft_mshnew(void)
 {
 	t_msh	*element;
 
-	element = (t_msh *)malloc(sizeof(*element));
+	element = (t_msh *)malloc(sizeof(t_msh));
+	if (!element)
+		return (NULL);
 	element->argc = 0;
+	element->argv = NULL;
 	element->fdin = 0;
 	element->fdout = 1;
 	element->pid = 0;
@@ -36,14 +39,14 @@ t_msh	*ft_mshnew(void)
 	return (element);
 }
 
-int	ft_error(char *str, int i)
+int	ft_error(char *str, int status)
 {
 	char	*s;
 
 	s = ft_strjoin("minishell: ", str);
 	printf("%s\n", s);
 	free(s);
-	g_status = i;
+	g_status.exit = status;
 	return (1);
 }
 

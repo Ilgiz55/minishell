@@ -6,7 +6,7 @@
 /*   By: rchau <rchau@student.21-school.ru>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/02 21:05:40 by rchau             #+#    #+#             */
-/*   Updated: 2022/01/10 15:42:57 by rchau            ###   ########.fr       */
+/*   Updated: 2022/01/10 19:29:33 by rchau            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ void	ft_exit_status(char **s, int *j)
 	*j += 1;
 	str = *s;
 	tmp = (char **)malloc(sizeof(char *) * 3);
-	status = ft_itoa(g_status);
+	status = ft_itoa(g_status.exit);
 	tmp[0] = ft_substr(str, 0, *j - 1);
 	tmp[1] = ft_strdup(str + *j + 1);
 	tmp[2] = ft_strjoin(tmp[0], status);
