@@ -193,9 +193,9 @@ void	ft_free_msh(t_msh *msh)
 	}
 }
 
-void	ft_handler(int sig)
+void	ft_handler(int sig_num)
 {
-	if (sig == SIGINT)
+	if (sig_num == SIGINT)
 	{
 		write(1, "\n", 1);
 		rl_on_new_line();
@@ -217,16 +217,17 @@ int	ft_exec(t_msh *msh, t_sup *sup)
 		msh->pid = fork();
 		if (msh->pid == 0)
 		{
+			signal(SIGINT, SIG_DFL);
 			execve(com, msh->argv, sup->env);
 			perror("execve");
 			exit(1);
 		}
 		waitpid(msh->pid, &g_status, 0);
 		free(com);
-		if (!WEXITSTATUS(g_status))
-			return (1);
+
 		return (0);
 	}
+	
 	s = ft_strjoin(msh->argv[0], ": command not found");
 	ft_error(s, 127);
 	free(s);
@@ -244,12 +245,14 @@ int main(int argc, char **argv, char **env)
 	t_msh	*save_msh;
 
 	g_status = 0;
-	sup = (t_sup *)malloc(sizeof(t_sup));
-	env_cpy(env, sup);
+	// rl_catch_signals = 0;
+	
+	sup = (t_sup *)malloc(sizeof(t_sup));	env_cpy(env, sup);
 	while (1)
 	{
 		signal(SIGINT, ft_handler);
 		signal(SIGQUIT, SIG_IGN);
+
 		tmpin = dup(0);
 		tmpout = dup(1);
 		str = NULL;
@@ -272,6 +275,7 @@ int main(int argc, char **argv, char **env)
 				msh = msh->next;
 			}
 		}
+		
 		dup2(tmpin, 0);
 		dup2(tmpout, 1);
 		close(tmpin);
