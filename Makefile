@@ -2,7 +2,6 @@ NAME	=	minishell
 #NAME_B	=	minishell_bonus
 
 HEADER	=	minishell.h
-#HEADER_B	= ./bonus/minishell.h
 
 
 SRC		= 	dollar.c		errors.c		ft_cd.c		\
@@ -12,10 +11,8 @@ SRC		= 	dollar.c		errors.c		ft_cd.c		\
 			parser_utils.c	quotes.c		redirect.c	\
 			support_fun.c	builtin.c		exec.c		\
 			parser_utils_2.c	
-#SRC_B	=	./
 
 OBJS	=	$(SRC:.c=.o)
-#OBJS_B	=	$(SRC_B:.c=.o)
 
 # RLIB	=	-L/Users/laubrey/homebrew/Cellar/readline/8.1.1/lib/
 # RINCL	=	-I/Users/laubrey/homebrew/Cellar/readline/8.1.1/include
@@ -38,19 +35,14 @@ $(NAME):	$(OBJS) $(HEADER)
 		$(MAKE) -C ./libft
 		$(GCC) $(CFLAGS) $(OBJS)  $(RLINE) $(RLIB) $(RINCL) ./libft/libft.a -o $(NAME)
 
-#bonus	:	$(OBJS_B) $(HEADER_B)
-#		$(MAKE) -C ./libft
-#		$(GCC) $(CFLAGS) $(OBJS_B) ./libft/libft.a -o $(NAME_B) $(RLINE) $(RLIB) $(RINCL)
 
 clean:
 		$(MAKE) clean -C ./libft
 		$(RM) $(OBJS)
-		$(RM) $(OBJS_B)
 
 fclean	:	clean
 		$(MAKE) fclean -C ./libft
 		$(RM) $(NAME)
-		$(RM) $(NAME_B)
 
 re		:	fclean all
 

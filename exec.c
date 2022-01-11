@@ -16,6 +16,7 @@ int	ft_exec(t_msh *msh, t_sup *sup)
 {
 	char	*com;
 	char	*s;
+	int 	status = 0;
 
 	if (ft_if_builtin(msh))
 		return (ft_builtin(msh, sup));
@@ -30,7 +31,9 @@ int	ft_exec(t_msh *msh, t_sup *sup)
 			perror("execve");
 			exit(1);
 		}
-		waitpid(msh->pid, &g_status.exit, 0);
+		g_status.child = 0;
+		waitpid(msh->pid, &status, 0);
+		g_status.exit = WSTOPSIG(status);
 		free(com);
 		return (0);
 	}

@@ -59,9 +59,9 @@ int	ft_unset(char **argv, char **env)
 	int	j;
 
 	i = 0;
-	if (!argv[1] || *(argv[i]) != '\0')
+	if (!argv[1] || *(argv[1]) == '\0')
 		return (0);
-	while (argv[++i] && *(argv[i]) != '\0')
+	while (argv[++i])
 	{
 		if (!unset_checker(argv[i]))
 		{
