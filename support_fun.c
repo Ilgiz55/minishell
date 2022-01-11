@@ -6,7 +6,7 @@
 /*   By: rchau <rchau@student.21-school.ru>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/08 19:03:15 by laubrey           #+#    #+#             */
-/*   Updated: 2022/01/10 19:32:09 by rchau            ###   ########.fr       */
+/*   Updated: 2022/01/11 17:57:23 by rchau            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,7 +87,7 @@ void	cd_chdirs(char *sup, char **env)
 	oldpwd = malloc(sizeof(char) * 1024);
 	getcwd(oldpwd, 1024);
 	if (chdir(sup))
-		g_status.exit = error_nsfod("cd", sup);
+		g_status = error_nsfod("cd", sup);
 	else
 	{
 		i = env_search_same("OLDPWD\0", env);
@@ -102,7 +102,7 @@ void	cd_chdirs(char *sup, char **env)
 			free(env[j]);
 			env[j] = ft_strjoin("PWD=\0", sup);
 		}
-		g_status.exit = 0;
+		g_status = 0;
 	}
 	free(oldpwd);
 }

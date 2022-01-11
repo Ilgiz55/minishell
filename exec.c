@@ -6,7 +6,7 @@
 /*   By: rchau <rchau@student.21-school.ru>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/10 13:58:52 by rchau             #+#    #+#             */
-/*   Updated: 2022/01/10 21:18:27 by rchau            ###   ########.fr       */
+/*   Updated: 2022/01/11 18:53:40 by rchau            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,12 +25,11 @@ int	ft_exec(t_msh *msh, t_sup *sup)
 		msh->pid = fork();
 		if (msh->pid == 0)
 		{
-			g_status.child = 1;
 			execve(com, msh->argv, sup->env);
-			perror("execve");
+			printf("minishell: %s: No such file or directory\n", com);
 			exit(1);
 		}
-		waitpid(msh->pid, &g_status.exit, 0);
+		waitpid(msh->pid, &g_status, 0);
 		free(com);
 		return (0);
 	}
@@ -70,6 +69,8 @@ int	has_command(char *path, char *str)
 	struct dirent	*rdir;
 
 	dirp = opendir(path);
+	if (!dirp)
+		return (0);
 	rdir = readdir(dirp);
 	while (rdir)
 	{

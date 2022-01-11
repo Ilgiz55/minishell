@@ -6,7 +6,7 @@
 /*   By: rchau <rchau@student.21-school.ru>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/10 14:14:36 by rchau             #+#    #+#             */
-/*   Updated: 2022/01/10 22:47:19 by rchau            ###   ########.fr       */
+/*   Updated: 2022/01/11 17:29:34 by rchau            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,6 @@ int	main(int argc, char **argv, char **env)
 
 	sup = (t_sup *)malloc(sizeof(t_sup));
 	env_cpy(env, sup, argc, argv);
-	g_status.child = 0;
 	while (1)
 	{
 		tmpin_out = ft_signal_and_tmp_in_out();
