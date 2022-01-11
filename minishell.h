@@ -6,7 +6,7 @@
 /*   By: rchau <rchau@student.21-school.ru>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/02 21:05:48 by rchau             #+#    #+#             */
-/*   Updated: 2022/01/10 19:56:37 by rchau            ###   ########.fr       */
+/*   Updated: 2022/01/10 22:40:22 by rchau            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,46 +24,36 @@
 # include <dirent.h>
 # include <signal.h>
 
-// int	g_status;
-// extern int rl_catch_signals;
-
 typedef struct s_status
 {
 	int	exit;
 	int	child;
 }	t_status;
 
-t_status g_status;
+t_status	g_status;
 
 typedef struct s_msh
 {
-	int		argc;
-	char	**argv;
-	// char	op;   // '|'   NULL
-	int		fdin;
-	int		fdout;
-	int		fdpipe[2];
-	int		pid;
-	char	*outfile;
-	char	*infile;
-	int		write_mode; // 2 - O_APPEND; 1 - O_TRUNC
-	struct s_msh *next;
-	struct s_msh *prev;
+	int				argc;
+	char			**argv;
+	int				fdin;
+	int				fdout;
+	int				fdpipe[2];
+	int				pid;
+	char			*outfile;
+	char			*infile;
+	int				write_mode;
+	struct s_msh	*next;
+	struct s_msh	*prev;
 }	t_msh;
 
-typedef struct s_sup{
-	// t_msh	*msh;
-	char 	**env;
+typedef struct s_sup
+{
+	char	**env;
 }	t_sup;
-
-t_msh bla;
-/* ****** PARSER ****** */
-
-void rl_replace_line();
 
 int		ft_builtin(t_msh *msh, t_sup *sup);
 int		ft_if_builtin(t_msh *msh);
-
 
 int		ft_new_command(t_msh **msh_p, char *str, int *k);
 int		ft_check_start(char *str, int *j);
@@ -104,13 +94,17 @@ void	ft_free_path(char **path_list);
 void	ft_handler(int sig_num);
 int		ft_check_str(char *str);
 int		*ft_signal_and_tmp_in_out(void);
+t_msh	*ft_execute_command(t_msh *msh, t_sup *sup, int *tmpin_out);
+void	env_cpy(char **from, t_sup *sup, int argc, char **argv);
+void	ft_pipe(t_msh *msh, int tmpin, int tmpout);
+void	ft_free_msh(t_msh *msh, char *str, int *tmp);
 
 int		ft_cd(char **arg, char **env);
 int		ft_echo(char **arg);
-void	status_writing();
+void	status_writing(void);
 int		ft_exit(char **arg, char **env);
 int		error_nar(char *comm, char *arg);
-int 	error_tma(char *arg);
+int		error_tma(char *arg);
 int		ft_export(char **arg, t_sup *sup);
 int		check_argv_ex(char *argv);
 void	print_quotes(char **env);
@@ -120,12 +114,12 @@ int		unset_checker(char *argv);
 void	uns_rewrite(char **env, int n);
 int		error_nsfod(char *comm, char *arg);
 int		error_nva(char *comm, char *arg);
-int		error_malloc();
+int		error_malloc(void);
 void	free_mass(char **mass);
 void	one_mas_fr_two(t_sup *sup, char *from);
 int		env_search_same(char *arg, char **env);
 int		ft_env(char **argv, char **env);
-int		ft_pwd();
+int		ft_pwd(void);
 void	cd_chdirs(char *sup, char **env);
 void	cd_currpwd(char **env);
 void	cd_prevpwd(char **env);
@@ -133,6 +127,3 @@ void	cd_oldpwd(char **env);
 void	cd_home(char **env);
 
 #endif
-
-
-// -lreadline  -L/Users/rchau/.brew/Cellar/readline/8.1.1/lib/ -I/Users/rchau/.brew/Cellar/readline/8.1.1/include
