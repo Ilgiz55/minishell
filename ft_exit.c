@@ -36,20 +36,22 @@ int	exit_check(char *arg, char *com)
 int	ft_exit(char **arg, char **env)
 {
 	int	i;
-	int	j;
 
-	j = 0;
 	if (arg[1] && arg[2])
 		if (error_tma(arg[0]))
 			return (1);
 	if (arg[1])
 		if (exit_check(arg[1], arg[0]))
-			return (1);
+		{
+			write (1, "exit\n", 5);
+			exit (1);
+		}
 	i = env_search_same("SHLVL", env);
 	if (i >= 0 && env[i][6] != '2')
 		env[i][6] = env[i][6] - 1;
-	else if (!arg[1])
-		exit (0);
-	i = ft_atoi(arg[1]);
-	exit (i);
+	g_status.exit = 0;
+	if (arg[1])
+		g_status.exit = ft_atoi(arg[1]);
+	write (1, "exit\n", 5);
+	exit (g_status.exit);
 }
