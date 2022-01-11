@@ -6,7 +6,7 @@
 /*   By: rchau <rchau@student.21-school.ru>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/02 21:05:48 by rchau             #+#    #+#             */
-/*   Updated: 2022/01/11 20:02:39 by rchau            ###   ########.fr       */
+/*   Updated: 2022/01/11 22:38:29 by rchau            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,6 +95,7 @@ void	env_cpy(char **from, t_sup *sup, int argc, char **argv);
 void	ft_pipe(t_msh *msh, int tmpin, int tmpout);
 void	ft_free_msh(t_msh *msh, char *str, int *tmp);
 void	ft_no_command(t_msh *msh);
+t_msh	*ft_msh_free_one(t_msh *msh);
 
 int		ft_cd(char **arg, char **env);
 int		ft_echo(char **arg);

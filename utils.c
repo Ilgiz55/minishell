@@ -6,11 +6,40 @@
 /*   By: rchau <rchau@student.21-school.ru>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/10 15:05:28 by rchau             #+#    #+#             */
-/*   Updated: 2022/01/11 20:03:07 by rchau            ###   ########.fr       */
+/*   Updated: 2022/01/11 23:04:40 by rchau            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+t_msh	*ft_msh_free_one(t_msh *msh)
+{
+	int	i;
+
+	if (msh->argv)
+	{
+		i = 0;
+		while (msh->argv[i])
+			free(msh->argv[i++]);
+		free(msh->argv);
+	}
+	if (msh->outfile)
+		free(msh->outfile);
+	if (msh->infile)
+		free(msh->infile);
+	if (msh->next)
+	{
+		msh = msh->next;
+		free(msh->prev);
+		msh->prev = NULL;
+	}
+	else
+	{
+		free(msh);
+		msh = NULL;
+	}
+	return (msh);
+}
 
 void	ft_handler(int sig_num)
 {
@@ -71,29 +100,4 @@ void	env_cpy(char **from, t_sup *sup, int argc, char **argv)
 	i = env_search_same("SHLVL", sup->env);
 	if (i >= 0)
 		sup->env[i][6] = sup->env[i][6] + 1;
-}
-
-void	ft_pipe(t_msh *msh, int tmpin, int tmpout)
-{
-	if (msh->infile)
-		msh->fdin = open(msh->infile, O_RDONLY, 0644);
-	else if (msh->prev && !msh->prev->outfile)
-		msh->fdin = msh->prev->fdpipe[0];
-	else
-		msh->fdin = dup(tmpin);
-	if (msh->outfile && msh->write_mode == 2)
-		msh->fdout = open(msh->outfile, O_WRONLY | O_APPEND);
-	else if (msh->outfile && msh->write_mode == 1)
-		msh->fdout = open(msh->outfile, O_WRONLY | O_TRUNC);
-	else if (msh->next)
-	{
-		pipe(msh->fdpipe);
-		msh->fdout = msh->fdpipe[1];
-	}
-	else
-		msh->fdout = dup(tmpout);
-	dup2(msh->fdin, 0);
-	close(msh->fdin);
-	dup2(msh->fdout, 1);
-	close(msh->fdout);
 }

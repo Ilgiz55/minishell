@@ -6,7 +6,7 @@
 /*   By: rchau <rchau@student.21-school.ru>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/02 20:50:40 by rchau             #+#    #+#             */
-/*   Updated: 2022/01/11 20:02:53 by rchau            ###   ########.fr       */
+/*   Updated: 2022/01/11 22:15:16 by rchau            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ int	ft_new_command(t_msh **msh_p, char *str, int *k)
 	i++;
 	while (str[i] == ' ')
 		i++;
-	if (str[i] == '\0' && str[i] != '|' && str[i] != '>' && str[i] != '<')
+	if (str[i] == '\0' || str[i] == '|' || str[i] == ';')
 		return (1);
 	msh->next = ft_mshnew();
 	msh->next->prev = msh;

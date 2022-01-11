@@ -6,58 +6,35 @@
 /*   By: rchau <rchau@student.21-school.ru>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/10 14:14:36 by rchau             #+#    #+#             */
-/*   Updated: 2022/01/11 20:02:25 by rchau            ###   ########.fr       */
+/*   Updated: 2022/01/11 23:03:58 by rchau            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-t_msh	*ft_msh_free_one(t_msh *msh)
+void	ft_pipe(t_msh *msh, int tmpin, int tmpout)
 {
-	int	i;
-
-	if (msh->argv)
-	{
-		i = 0;
-		while (msh->argv[i])
-			free(msh->argv[i++]);
-		free(msh->argv);
-	}
-	if (msh->outfile)
-		free(msh->outfile);
 	if (msh->infile)
-		free(msh->infile);
-	if (msh->next)
+		msh->fdin = open(msh->infile, O_RDONLY, 0644);
+	else if (msh->prev && !msh->prev->outfile)
+		msh->fdin = msh->prev->fdpipe[0];
+	else
+		msh->fdin = dup(tmpin);
+	if (msh->outfile && msh->write_mode == 2)
+		msh->fdout = open(msh->outfile, O_WRONLY | O_APPEND);
+	else if (msh->outfile && msh->write_mode == 1)
+		msh->fdout = open(msh->outfile, O_WRONLY | O_TRUNC);
+	else if (msh->next)
 	{
-		msh = msh->next;
-		free(msh->prev);
-		msh->prev = NULL;
+		pipe(msh->fdpipe);
+		msh->fdout = msh->fdpipe[1];
 	}
 	else
-	{
-		free(msh);
-		msh = NULL;
-	}
-	return (msh);
-}
-
-void	ft_free_msh(t_msh *msh, char *str, int *tmp)
-{
-	free(str);
-	dup2(tmp[0], 0);
-	dup2(tmp[1], 1);
-	close(tmp[0]);
-	close(tmp[1]);
-	free(tmp);
-	while (msh)
-		msh = ft_msh_free_one(msh);
-}
-
-t_msh	*ft_execute_command(t_msh *msh, t_sup *sup, int *tmpin_out)
-{
-	ft_pipe(msh, tmpin_out[0], tmpin_out[1]);
-	ft_exec(msh, sup);
-	return (msh->next);
+		msh->fdout = dup(tmpout);
+	dup2(msh->fdin, 0);
+	close(msh->fdin);
+	dup2(msh->fdout, 1);
+	close(msh->fdout);
 }
 
 int	ft_exec(t_msh *msh, t_sup *sup)
@@ -85,6 +62,25 @@ int	ft_exec(t_msh *msh, t_sup *sup)
 	}
 	ft_no_command(msh);
 	return (1);
+}
+
+t_msh	*ft_execute_command(t_msh *msh, t_sup *sup, int *tmpin_out)
+{
+	ft_pipe(msh, tmpin_out[0], tmpin_out[1]);
+	ft_exec(msh, sup);
+	return (msh->next);
+}
+
+void	ft_free_msh(t_msh *msh, char *str, int *tmp)
+{
+	free(str);
+	dup2(tmp[0], 0);
+	dup2(tmp[1], 1);
+	close(tmp[0]);
+	close(tmp[1]);
+	free(tmp);
+	while (msh)
+		msh = ft_msh_free_one(msh);
 }
 
 int	main(int argc, char **argv, char **env)

@@ -6,7 +6,7 @@
 /*   By: rchau <rchau@student.21-school.ru>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/08 19:02:09 by laubrey           #+#    #+#             */
-/*   Updated: 2022/01/11 20:02:21 by rchau            ###   ########.fr       */
+/*   Updated: 2022/01/11 22:16:30 by rchau            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,7 @@ int	ft_unset(char **argv, char **env)
 	i = 0;
 	if (!argv[1] || *(argv[1]) == '\0')
 		return (0);
-	while (argv[++i])
+	while (argv[i])
 	{
 		if (!unset_checker(argv[i]))
 		{
