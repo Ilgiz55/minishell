@@ -6,37 +6,19 @@
 /*   By: rchau <rchau@student.21-school.ru>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/10 13:58:52 by rchau             #+#    #+#             */
-/*   Updated: 2022/01/11 18:53:40 by rchau            ###   ########.fr       */
+/*   Updated: 2022/01/11 20:01:52 by rchau            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	ft_exec(t_msh *msh, t_sup *sup)
+void	ft_no_command(t_msh *msh)
 {
-	char	*com;
 	char	*s;
 
-	if (ft_if_builtin(msh))
-		return (ft_builtin(msh, sup));
-	com = ft_command(msh->argv[0], sup->env);
-	if (com)
-	{
-		msh->pid = fork();
-		if (msh->pid == 0)
-		{
-			execve(com, msh->argv, sup->env);
-			printf("minishell: %s: No such file or directory\n", com);
-			exit(1);
-		}
-		waitpid(msh->pid, &g_status, 0);
-		free(com);
-		return (0);
-	}
 	s = ft_strjoin(msh->argv[0], ": command not found");
 	ft_error(s, 127);
 	free(s);
-	return (1);
 }
 
 char	*ft_command_dir(char *str, char **env)

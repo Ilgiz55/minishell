@@ -6,7 +6,7 @@
 /*   By: rchau <rchau@student.21-school.ru>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/10 14:14:36 by rchau             #+#    #+#             */
-/*   Updated: 2022/01/11 17:29:34 by rchau            ###   ########.fr       */
+/*   Updated: 2022/01/11 20:02:25 by rchau            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,6 +58,33 @@ t_msh	*ft_execute_command(t_msh *msh, t_sup *sup, int *tmpin_out)
 	ft_pipe(msh, tmpin_out[0], tmpin_out[1]);
 	ft_exec(msh, sup);
 	return (msh->next);
+}
+
+int	ft_exec(t_msh *msh, t_sup *sup)
+{
+	char	*com;
+	int		status;
+
+	status = 0;
+	if (ft_if_builtin(msh))
+		return (ft_builtin(msh, sup));
+	com = ft_command(msh->argv[0], sup->env);
+	if (com)
+	{
+		msh->pid = fork();
+		if (msh->pid == 0)
+		{
+			execve(com, msh->argv, sup->env);
+			printf("minishell: %s: No such file or directory\n", com);
+			exit(1);
+		}
+		waitpid(msh->pid, &status, 0);
+		g_status = WSTOPSIG(status);
+		free(com);
+		return (0);
+	}
+	ft_no_command(msh);
+	return (1);
 }
 
 int	main(int argc, char **argv, char **env)
