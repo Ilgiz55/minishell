@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_exit.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: laubrey <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: rchau <rchau@student.21-school.ru>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/08 19:01:37 by laubrey           #+#    #+#             */
-/*   Updated: 2022/01/08 19:01:40 by laubrey          ###   ########.fr       */
+/*   Updated: 2022/01/11 20:02:10 by rchau            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,17 +41,19 @@ int	ft_exit(char **arg, char **env)
 		if (error_tma(arg[0]))
 			return (1);
 	if (arg[1])
+	{
 		if (exit_check(arg[1], arg[0]))
 		{
 			write (1, "exit\n", 5);
 			exit (1);
 		}
+	}
 	i = env_search_same("SHLVL", env);
 	if (i >= 0 && env[i][6] != '2')
 		env[i][6] = env[i][6] - 1;
-	g_status.exit = 0;
+	g_status = 0;
 	if (arg[1])
-		g_status.exit = ft_atoi(arg[1]);
+		g_status = ft_atoi(arg[1]);
 	write (1, "exit\n", 5);
-	exit (g_status.exit);
+	exit (g_status);
 }

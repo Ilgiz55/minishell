@@ -6,7 +6,7 @@
 /*   By: rchau <rchau@student.21-school.ru>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/08 19:00:11 by laubrey           #+#    #+#             */
-/*   Updated: 2022/01/10 19:30:28 by rchau            ###   ########.fr       */
+/*   Updated: 2022/01/11 20:01:56 by rchau            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ void	cd_currpwd(char **env)
 	else
 	{
 		write(2, "PATH did not found\n", 19);
-		g_status.exit = 1;
+		g_status = 1;
 	}
 	free(sup);
 }
@@ -47,7 +47,7 @@ void	cd_prevpwd(char **env)
 	else
 	{
 		write(2, "PATH did not found\n", 19);
-		g_status.exit = 1;
+		g_status = 1;
 	}
 	free(sup);
 }
@@ -71,7 +71,7 @@ void	cd_oldpwd(char **env)
 	}
 	else
 	{
-		g_status.exit = 1;
+		g_status = 1;
 		write(1, "cd: OLDPWD not set\n", 19);
 	}
 }
@@ -92,7 +92,7 @@ void	cd_home(char **env)
 		cd_currpwd(env);
 	else
 	{
-		g_status.exit = 1;
+		g_status = 1;
 		write(1, "cd: HOME not set\n", 17);
 	}
 }

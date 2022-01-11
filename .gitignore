@@ -13,3 +13,4 @@ CMakeLists.txt
 minishell
 libftss.c
 minishell-tester
+to_fix

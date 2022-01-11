@@ -6,7 +6,7 @@
 /*   By: rchau <rchau@student.21-school.ru>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/02 21:05:31 by rchau             #+#    #+#             */
-/*   Updated: 2022/01/10 19:17:32 by rchau            ###   ########.fr       */
+/*   Updated: 2022/01/11 20:02:48 by rchau            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ int	ft_error(char *str, int status)
 	s = ft_strjoin("minishell: ", str);
 	printf("%s\n", s);
 	free(s);
-	g_status.exit = status;
+	g_status = status;
 	return (1);
 }
 

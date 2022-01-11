@@ -6,7 +6,7 @@
 /*   By: rchau <rchau@student.21-school.ru>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/10 14:14:36 by rchau             #+#    #+#             */
-/*   Updated: 2022/01/10 22:47:19 by rchau            ###   ########.fr       */
+/*   Updated: 2022/01/11 20:02:25 by rchau            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +60,33 @@ t_msh	*ft_execute_command(t_msh *msh, t_sup *sup, int *tmpin_out)
 	return (msh->next);
 }
 
+int	ft_exec(t_msh *msh, t_sup *sup)
+{
+	char	*com;
+	int		status;
+
+	status = 0;
+	if (ft_if_builtin(msh))
+		return (ft_builtin(msh, sup));
+	com = ft_command(msh->argv[0], sup->env);
+	if (com)
+	{
+		msh->pid = fork();
+		if (msh->pid == 0)
+		{
+			execve(com, msh->argv, sup->env);
+			printf("minishell: %s: No such file or directory\n", com);
+			exit(1);
+		}
+		waitpid(msh->pid, &status, 0);
+		g_status = WSTOPSIG(status);
+		free(com);
+		return (0);
+	}
+	ft_no_command(msh);
+	return (1);
+}
+
 int	main(int argc, char **argv, char **env)
 {
 	char	*str;
@@ -70,7 +97,6 @@ int	main(int argc, char **argv, char **env)
 
 	sup = (t_sup *)malloc(sizeof(t_sup));
 	env_cpy(env, sup, argc, argv);
-	g_status.child = 0;
 	while (1)
 	{
 		tmpin_out = ft_signal_and_tmp_in_out();
